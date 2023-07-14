@@ -1,0 +1,3 @@
+---
+- debug:
+    msg: "This will create a cloud function"
