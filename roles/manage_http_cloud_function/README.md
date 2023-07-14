@@ -19,7 +19,7 @@ A role to create and delete cloud functions.
 
 
 ## Examples
-
+```
 - name: Delete a cloud function using manage_http_cloud_function role
   ansible.builtin.include_role:
     name: cloud.gcp_ops.manage_http_cloud_function
@@ -30,3 +30,4 @@ A role to create and delete cloud functions.
     func_project: project-uscentral-demo
     auth_kind: serviceaccount
     service_account_file: /path/to/auth/credentials.json
+```
