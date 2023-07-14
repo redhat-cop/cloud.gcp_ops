@@ -1,3 +1,27 @@
 ---
-- debug:
-    msg: "This will create a cloud function"
+- name: Create a cloud function
+  google.cloud.gcp_cloudfunctions_cloud_function:
+    name: "{{ func_name }}"
+    location: "{{ func_location }}"
+    project: "{{ func_project }}"
+    entry_point: "{{ func_entry_point }}"
+    source_archive_url: "{{ func_source_archive_url }}"
+    trigger_http: 'true'
+    auth_kind: "{{ auth_kind }}"
+    service_account_file: "{{ service_account_file }}"
+    runtime: "{{ func_runtime }}"
+    state: present
+
+- name: Get info on cloud function created
+  google.cloud.gcp_cloudfunctions_cloud_function_info:
+    location: "{{ func_location }}"
+    project: "{{ func_project }}"
+    auth_kind: "{{ auth_kind }}"
+    service_account_file: "{{ service_account_file }}"
+  register: cloud_functions_list
+
+- name: Set fact for cloud functions details to use in playbook
+  ansible.builtin.set_fact:
+    manage_http_cloud_function_func_details: "{{ item }}"
+  with_items: "{{ cloud_functions_list.resources }}"
+  when: item.name.split('/')[-1]  == "{{ func_name }}"
