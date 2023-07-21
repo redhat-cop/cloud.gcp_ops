@@ -1,4 +1,4 @@
-# cloud.gcp_ops roles/playbooks to demo Ansible on AWS
+# cloud.gcp_ops roles/playbooks to demo Ansible on GCP
 
 This repository hosts the `cloud.gcp_ops` Ansible Collection.
 
@@ -17,7 +17,6 @@ Click on the name of a role to view that content's documentation:
 ### Roles
 Name | Description
 --- | ---
-[cloud.gcp_ops.manage_machine_image](https://github.com/ansible-collections/cloud.aws_ops/blob/main/roles/manage_machine_image/README.md)|A role to create / delete a GCP custom machine image.
 
 ### Playbooks
 Name | Description
@@ -37,7 +36,7 @@ Clone the collection repository.
 ```shell
   mkdir -p ~/.ansible/collections/ansible_collections/cloud/gcp_ops
   cd ~/.ansible/collections/ansible_collections/cloud/gcp_ops
-  git clone https://github.com/redhat-cop/cloud.aws_ops .
+  git clone https://github.com/redhat-cop/cloud.gcp_ops .
 ```
 
 ### Using this collection
