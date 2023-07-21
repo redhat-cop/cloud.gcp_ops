@@ -1,0 +1,31 @@
+---
+- name: 'Run cloud.gcp_ops.manage_machine_image integration tests'
+  collections:
+    - google.cloud
+  module_defaults:
+    group/gcp:
+      project: "{{ gcp_project }}"
+      auth_kind: "{{ gcp_cred_kind }}"
+      service_account_file: "{{ gcp_cred_file }}"
+
+  vars:
+    test_manage_machine_image_zone: "us-central1-a"
+    project: "{{ gcp_project }}"
+    compute_service_account: "{{ gcp_cred_email }}"
+
+  block:
+    - name: Create a custom machine image from a source disk
+      ansible.builtin.include_tasks: ./image_from_source_disk.yml
+
+    - name: Create a custom machine image from a source snapshot
+      ansible.builtin.include_tasks: ./image_from_source_snapshot.yml
+
+    - name: Create a custom machine image from another source image
+      ansible.builtin.include_tasks: ./image_from_source_image.yml
+
+    # Lacking sufficient permissions to export image to storage bucket
+    # - name: Create a machine image from a source raw disk
+    #   ansible.builtin.include_tasks: ./image_from_source_raw_disk.yml
+
+    - name: Delete a custom machine image
+      ansible.builtin.include_tasks: ./image_delete.yml

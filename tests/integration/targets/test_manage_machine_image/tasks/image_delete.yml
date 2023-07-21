@@ -1,0 +1,43 @@
+---
+- name: Create a machine image from a source disk
+  block:
+    - name: Create a disk
+      google.cloud.gcp_compute_disk:
+        name: "{{ disk_name }}"
+        zone: "{{ zone }}"
+        state: present
+      register: test_manage_machine_image__disk_create
+
+    - name: Create an image
+      google.cloud.gcp_compute_image:
+        state: present
+        name: "{{ image_name }}"
+        source_disk: "{{ test_manage_machine_image__disk_create }}"
+      register: test_manage_machine_image__image_create
+
+    - name: Assert changed is true
+      ansible.builtin.assert:
+        that:
+          - test_manage_machine_image__image_create.changed == true
+
+    - name: Delete a custom machine image
+      ansible.builtin.include_role:
+        name: cloud.gcp_ops.manage_machine_image
+      vars:
+        manage_machine_image_operation: delete
+        manage_machine_image_image_name: "{{ image_name }}"
+        manage_machine_image_zone: "{{ test_manage_machine_image_zone }}"
+
+  always:
+    - name: Delete image
+      google.cloud.gcp_compute_image:
+        name: "{{ image_name }}"
+        state: absent
+      ignore_errors: true
+
+    - name: Delete disk
+      google.cloud.gcp_compute_disk:
+        name: "{{ disk_name }}"
+        zone: "{{ zone }}"
+        state: absent
+      ignore_errors: true
