@@ -1,0 +1,31 @@
+---
+- name: Delete the machine image {{ manage_machine_image_image_name }}
+  block:
+    - name: Verify if the machine image exists
+      google.cloud.gcp_compute_image_info:
+        filters:
+          - name = {{ manage_machine_image_image_name }}
+      register: manage_machine_image__image_info
+
+    - name: Delete the machine image
+      when: manage_machine_image__image_info.resources | length == 1
+      block:
+        - name: Delete custom machine image
+          google.cloud.gcp_compute_image:
+            state: absent
+            name: "{{ manage_machine_image_image_name }}"
+
+        - name: Verify that image was deleted
+          google.cloud.gcp_compute_image_info:
+            filters:
+              - name = {{ manage_machine_image_image_name }}
+          register: manage_machine_image__delete_info
+
+        - name: Verify that task succeeded
+          ansible.builtin.assert:
+            that:
+              - manage_machine_image__delete_info.resources | length == 0
+
+        - name: Print debug message
+          ansible.builtin.debug:
+            msg: Machine image {{ manage_machine_image_image_name }} was successfully deleted.

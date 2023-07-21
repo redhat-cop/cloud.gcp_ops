@@ -1,0 +1,103 @@
+---
+- name: Create a machine image from a raw disk
+  block:
+    - name: Create a disk
+      google.cloud.gcp_compute_disk:
+        state: present
+        name: "{{ disk_name }}"
+        zone: "{{ zone }}"
+      register: test_manage_machine_image__disk_create
+
+    - name: Create an image
+      google.cloud.gcp_compute_image:
+        state: present
+        name: "{{ source_image_name }}"
+        source_disk: "{{ test_manage_machine_image__disk_create }}"
+      register: test_manage_machine_image__image_create
+
+    - name: Assert changed is true
+      ansible.builtin.assert:
+        that:
+          - test_manage_machine_image__image_create.changed == true
+
+    - name: Verify that image was created
+      google.cloud.gcp_compute_image_info:
+        filters:
+          - name = {{ source_image_name }}
+      register: test_manage_machine_image__image_info
+
+    - name: Verify that command succeeded
+      ansible.builtin.assert:
+        that:
+          - test_manage_machine_image__image_info['resources'] | length == 1
+
+    - name: Create a storage bucket
+      google.cloud.gcp_storage_bucket:
+        state: present
+        name: "{{ bucket_name }}"
+      register: test_manage_machine_image__bucket_create
+
+    - name: Assert changed is true
+      ansible.builtin.assert:
+        that:
+          - test_manage_machine_image__bucket_create.changed == true
+
+    # # You don't have permission to create a role
+    # - name: Create a role
+    #   google.cloud.gcp_iam_role:
+    #     name: "{{ role_name }}"
+    #     title: A Custom Role
+    #     description: A custom role description
+    #     included_permissions:
+    #       - iam.roles.compute.storageAdmin
+    #       - iam.roles.storage.objectAdmin
+    #     state: present
+    #   register: test_manage_machine_image_role_create
+
+    - name: Export image to storage bucket
+      ansible.builtin.command: gcloud compute images export \
+                --destination-uri gs://{{ bucket_name }}/{{ source_image_name }}.tar.gz \
+                --image {{ source_image_name }} \
+                --project "{{ project }}" \
+                --compute-service-account "{{ service_account_file }}"
+      changed_when: false
+      register: test_manage_machine_image__raw_disk
+
+    - name: Create a new custom machine image
+      ansible.builtin.include_role:
+        name: cloud.gcp_ops.manage_machine_image
+      vars:
+        manage_machine_image_operation: create
+        manage_machine_image_source_raw_disk: "{{ test_manage_machine_image__raw_disk.stdout }}"
+        manage_machine_image_image_name: "{{ image_name }}"
+        manage_machine_image_image_description: "{{ description }}"
+        manage_machine_image_zone: "{{ test_manage_machine_image_zone }}"
+
+  always:
+    - name: Delete images
+      google.cloud.gcp_compute_image:
+        state: absent
+        name: "{{ item }}"
+      loop:
+        - "{{ image_name }}"
+        - "{{ source_image_name }}"
+      ignore_errors: true
+
+    - name: Delete disk
+      google.cloud.gcp_compute_disk:
+        state: absent
+        name: "{{ disk_name }}"
+        zone: "{{ zone }}"
+      ignore_errors: true
+
+    - name: Delete storage bucket
+      google.cloud.gcp_storage_bucket:
+        state: absent
+        name: "{{ bucket_name }}"
+      ignore_errors: true
+
+    # - name: Delete role
+    #   google.cloud.gcp_iam_role:
+    #     state: absent
+    #     name: "{{ role_name }}"
+    #   ignore_errors: true
