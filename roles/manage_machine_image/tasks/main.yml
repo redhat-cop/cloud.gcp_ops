@@ -1,5 +1,0 @@
----
-- name: Run 'cloud.gcp_ops.manage_image_machine' role
-  block:
-    - name: Create / Delete GCP Custom Machine Images
-      ansible.builtin.include_tasks: "{{ manage_machine_image_operation }}.yml"
