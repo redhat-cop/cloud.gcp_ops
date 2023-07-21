@@ -1,0 +1,33 @@
+- name: Test 'manage_http_cloud_function' role
+  block:
+    - name: Include 'setup.yaml' file
+      ansible.builtin.include_tasks: setup.yaml
+
+    - name: Create a cloud function
+      ansible.builtin.include_role:
+        name: cloud.gcp_ops.manage_http_cloud_function
+      vars:
+        operation: create
+        func_name: "{{ integration_test_func_name }}"
+        func_location: us-central1
+        func_project: "{{ integration_test_project_name }}"
+        func_entry_point: hello_http
+        func_source_archive_url: "{{ 'gs://' +  integration_test_bucket_name  + '/flask-cloud-func-source.zip' }}"
+        func_runtime: python311
+        auth_kind: serviceaccount
+        service_account_file: "{{ integration_test_auth_pem_file }}"
+
+    - name: Delete a cloud function
+      ansible.builtin.include_role:
+        name: cloud.gcp_ops.manage_http_cloud_function
+      vars:
+        operation: delete
+        func_name: "{{ integration_test_func_name }}"
+        func_location: us-central1
+        func_project: "{{ integration_test_project_name }}"
+        auth_kind: serviceaccount
+        service_account_file: "{{ integration_test_auth_pem_file }}"
+
+  always:
+    - name: Include 'teardown.yaml' file
+      ansible.builtin.include_tasks: teardown.yaml

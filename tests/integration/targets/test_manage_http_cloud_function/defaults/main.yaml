@@ -1,0 +1,7 @@
+---
+# defaults file for test_manage_http_cloud_function
+
+integration_test_bucket_name: ""
+integration_test_project_name: ""
+integration_test_auth_pem_file: ""
+integration_test_func_name: ""

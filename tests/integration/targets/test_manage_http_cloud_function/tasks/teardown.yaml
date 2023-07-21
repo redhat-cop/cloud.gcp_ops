@@ -1,0 +1,9 @@
+---
+# Unable to delete non empty bucket
+- name: Delete storage bucket
+  google.cloud.gcp_storage_bucket:
+    name: "{{ integration_test_bucket_name }}"
+    project: "{{ integration_test_project_name }}"
+    auth_kind: serviceaccount
+    service_account_file: "/tmp/auth.pem"
+    state: absent
