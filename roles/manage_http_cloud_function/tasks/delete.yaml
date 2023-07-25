@@ -9,8 +9,10 @@
         auth_kind: "{{ auth_kind }}"
         service_account_file: "{{ service_account_file }}"
         state: absent
+      # noqa: var-naming[no-role-prefix]
       register: delete_result
 
     - name: Print result
       ansible.builtin.debug:
+        # noqa: var-naming[no-role-prefix]
         msg: "Deleted function {{ func_name }}: {{ delete_result.changed }}"
