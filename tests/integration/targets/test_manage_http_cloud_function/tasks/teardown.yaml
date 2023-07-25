@@ -1,9 +1,12 @@
 ---
-# Unable to delete non empty bucket
+# Unable to delete non empty bucket, module does not support
 - name: Delete storage bucket
   google.cloud.gcp_storage_bucket:
-    name: "{{ integration_test_bucket_name }}"
-    project: "{{ integration_test_project_name }}"
+    name: "{{ test_bucket_name }}"
+    project: "{{ test_project_name }}"
     auth_kind: serviceaccount
     service_account_file: "/tmp/auth.pem"
     state: absent
+
+# - name: Delete storage bucket
+#   command: "gcloud storage rm --recursive {{ test_func_src_url }}"

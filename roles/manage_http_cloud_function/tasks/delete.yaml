@@ -1,5 +1,5 @@
 ---
-- name: Delete vpc peering connection request
+- name: Delete a cloud function
   block:
     - name: Delete a cloud function
       google.cloud.gcp_cloudfunctions_cloud_function:
@@ -13,4 +13,4 @@
 
     - name: Print result
       ansible.builtin.debug:
-          msg: "Deleted cloud function {{ func_name }}: {{ delete_result.changed }}"
+        msg: "Deleted function {{ func_name }}: {{ delete_result.changed }}"

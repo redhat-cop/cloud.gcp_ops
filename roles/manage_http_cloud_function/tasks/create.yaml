@@ -24,4 +24,4 @@
   ansible.builtin.set_fact:
     manage_http_cloud_function_func_details: "{{ item }}"
   with_items: "{{ cloud_functions_list.resources }}"
-  when: item.name.split('/')[-1]  == "{{ func_name }}"
+  when: item.name.split('/')[-1]  ==  func_name

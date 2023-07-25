@@ -1,7 +1,9 @@
 ---
 # defaults file for test_manage_http_cloud_function
 
-integration_test_bucket_name: ""
-integration_test_project_name: ""
-integration_test_auth_pem_file: ""
-integration_test_func_name: ""
+test_bucket_name: ""
+test_project_name: ""
+test_auth_pem_file: ""
+test_func_name: ""
+test_func_src_url:
+  "{{ 'gs://' + test_bucket_name + '/flask-cloud-func-source.zip' }}"
