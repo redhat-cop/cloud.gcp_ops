@@ -10,12 +10,12 @@
       # noqa: var-naming[no-role-prefix]
       vars:
         operation: create
-        func_name: "{{ test_func_name }}"
-        func_location: us-central1
-        func_project: "{{ test_project_name }}"
-        func_entry_point: hello_http
-        func_source_archive_url: "{{ test_func_src_url }}"
-        func_runtime: python311
+        manage_http_cloud_function_name: "{{ test_manage_http_cloud_function_name }}"
+        manage_http_cloud_function_location: us-central1
+        manage_http_cloud_function_project: "{{ test_project_name }}"
+        manage_http_cloud_function_entry_point: hello_http
+        manage_http_cloud_function_source_archive_url: "{{ test_func_src_url }}"
+        manage_http_cloud_function_runtime: python311
         auth_kind: serviceaccount
         service_account_file: "{{ test_auth_pem_file }}"
 
@@ -25,9 +25,9 @@
       # noqa: var-naming[no-role-prefix]
       vars:
         operation: delete
-        func_name: "{{ test_func_name }}"
-        func_location: us-central1
-        func_project: "{{ test_project_name }}"
+        manage_http_cloud_function_name: "{{ test_manage_http_cloud_function_name }}"
+        manage_http_cloud_function_location: us-central1
+        manage_http_cloud_function_project: "{{ test_project_name }}"
         auth_kind: serviceaccount
         service_account_file: "{{ test_auth_pem_file }}"
 

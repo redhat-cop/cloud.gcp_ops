@@ -3,11 +3,11 @@
   block:
     - name: Delete a cloud function
       google.cloud.gcp_cloudfunctions_cloud_function:
-        name: "{{ func_name }}"
-        location: "{{ func_location }}"
-        project: "{{ func_project }}"
-        auth_kind: "{{ auth_kind }}"
-        service_account_file: "{{ service_account_file }}"
+        name: "{{ manage_http_cloud_function_name }}"
+        location: "{{ manage_http_cloud_function_location }}"
+        project: "{{ manage_http_cloud_function_project }}"
+        auth_kind: "{{ manage_http_cloud_function_auth_kind }}"
+        service_account_file: "{{ manage_http_cloud_function_service_account_file }}"
         state: absent
       # noqa: var-naming[no-role-prefix]
       register: delete_result
@@ -15,4 +15,4 @@
     - name: Print result
       ansible.builtin.debug:
         # noqa: var-naming[no-role-prefix]
-        msg: "Deleted function {{ func_name }}: {{ delete_result.changed }}"
+        msg: "Deleted function {{ manage_http_cloud_function_name }}: {{ delete_result.changed }}"

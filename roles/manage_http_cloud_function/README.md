@@ -8,19 +8,25 @@ A role to create and delete cloud functions.
 - operation - Choices include 'create' and 'delete'.
 `required` always
 
-- func_name - A user-defined name of the function. Function names must be unique globally and match pattern `projects/*/locations/*/functions/*`.
+- manage_http_cloud_function_name - A user-defined name of the function. Function names must be unique globally and match pattern `projects/*/locations/*/functions/*`.
 `required` always
 
-- func_location - The location of this cloud function.
+- manage_http_cloud_function_location - The location of this cloud function.
 `required` always
 
-- func_project - ID of the Google Cloud Platform project to use.
+- manage_http_cloud_function_project - ID of the Google Cloud Platform project to use.
 `required` always
 
-- func_runtime - The runtime in which to run the function.
+- manage_http_cloud_function_runtime - The runtime in which to run the function.
 `required` when `operation=create`
 
-- func_entry_point - The name of the function (as defined in source code) that will be executed.
+- manage_http_cloud_function_available_memory_mb - The amount of memory in MB available for a function.
+
+- manage_http_cloud_function_description - The amount of memory in MB available for a function.
+
+- manage_http_cloud_function_scopes - Array of scopes to be used.
+
+- manage_http_cloud_function_entry_point - The name of the function (as defined in source code) that will be executed.
 `required` when `operation=create`
 
 - source_archive_url - The Google Cloud Storage URL, starting with gs://, pointing to the zip archive which contains the function.
@@ -43,12 +49,12 @@ On successful creation of cloud function, the cloud function's details can be ac
     name: cloud.gcp_ops.manage_http_cloud_function
   vars:
     operation: create
-    func_name: my-test-cloud-function
-    func_location: us-central1
-    func_project: project-uscentral-demo
-    func_entry_point: helloHttp
-    func_source_archive_url: gs://test-storage-bucket/function-source.zip
-    func_runtime: nodejs20
+    manage_http_cloud_function_name: my-test-cloud-function
+    manage_http_cloud_function_location: us-central1
+    manage_http_cloud_function_project: project-uscentral-demo
+    manage_http_cloud_function_entry_point: helloHttp
+    manage_http_cloud_function_source_archive_url: gs://test-storage-bucket/function-source.zip
+    manage_http_cloud_function_runtime: nodejs20
     auth_kind: serviceaccount
     service_account_file: /path/to/auth/credentials.json
 
@@ -61,9 +67,9 @@ On successful creation of cloud function, the cloud function's details can be ac
     name: cloud.gcp_ops.manage_http_cloud_function
   vars:
     operation: delete
-    func_name: my-test-cloud-function
-    func_location: us-central1
-    func_project: project-uscentral-demo
+    manage_http_cloud_function_name: my-test-cloud-function
+    manage_http_cloud_function_location: us-central1
+    manage_http_cloud_function_project: project-uscentral-demo
     auth_kind: serviceaccount
     service_account_file: /path/to/auth/credentials.json
 ```

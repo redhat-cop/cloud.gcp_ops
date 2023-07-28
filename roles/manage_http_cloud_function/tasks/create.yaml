@@ -1,23 +1,26 @@
 ---
 - name: Create a cloud function
   google.cloud.gcp_cloudfunctions_cloud_function:
-    name: "{{ func_name }}"
-    location: "{{ func_location }}"
-    project: "{{ func_project }}"
-    entry_point: "{{ func_entry_point }}"
-    source_archive_url: "{{ func_source_archive_url }}"
+    name: "{{ manage_http_cloud_function_name }}"
+    location: "{{ manage_http_cloud_function_location }}"
+    project: "{{ manage_http_cloud_function_project }}"
+    entry_point: "{{ manage_http_cloud_function_entry_point }}"
+    source_archive_url: "{{ manage_http_cloud_function_source_archive_url }}"
     trigger_http: 'true'
-    auth_kind: "{{ auth_kind }}"
-    service_account_file: "{{ service_account_file }}"
-    runtime: "{{ func_runtime }}"
+    auth_kind: "{{ manage_http_cloud_function_auth_kind }}"
+    service_account_file: "{{ manage_http_cloud_function_service_account_file }}"
+    runtime: "{{ manage_http_cloud_function_runtime }}"
+    available_memory_db: "{{ manage_http_cloud_function_available_memory_mb | default(omit) }}"
+    description: "{{ manage_http_cloud_function_description | default(omit) }}"
+    scopes: "{{ manage_http_cloud_function_scopes | default(omit) }}"
     state: present
 
 - name: Get info on cloud function created
   google.cloud.gcp_cloudfunctions_cloud_function_info:
-    location: "{{ func_location }}"
-    project: "{{ func_project }}"
-    auth_kind: "{{ auth_kind }}"
-    service_account_file: "{{ service_account_file }}"
+    location: "{{ manage_http_cloud_function_location }}"
+    project: "{{ manage_http_cloud_function_project }}"
+    auth_kind: "{{ manage_http_cloud_function_auth_kind }}"
+    service_account_file: "{{ manage_http_cloud_function_service_account_file }}"
   # noqa: var-naming[no-role-prefix]
   register: cloud_functions_list
 
@@ -26,4 +29,4 @@
     manage_http_cloud_function_func_details: "{{ item }}"
   # noqa: var-naming[no-role-prefix]
   with_items: "{{ cloud_functions_list.resources }}"
-  when: item.name.split('/')[-1]  ==  func_name
+  when: item.name.split('/')[-1]  ==  manage_http_cloud_function_name
