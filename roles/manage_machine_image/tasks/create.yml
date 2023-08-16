@@ -13,7 +13,7 @@
 
         - name: Print debug message
           ansible.builtin.debug:
-            msg: Disk {{ manage_machine_image_source_source_disk_name }} does not exist.
+            msg: Disk {{ manage_machine_image_source_disk_name }} does not exist in {{ manage_machine_image_zone }}.
           when: manage_machine_image__source_disk_info.resources | length == 0
 
     - name: Verify if snapshot exists
@@ -68,7 +68,7 @@
       block:
         - name: Delete machine image
           google.cloud.gcp_compute_image:
-            zone: "{{ manage_machine_image_zone }}"
+            state: absent
             name: "{{ manage_machine_image_image_name }}"
 
         - name: Verify that machine image was deleted

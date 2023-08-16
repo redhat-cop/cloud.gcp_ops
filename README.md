@@ -17,7 +17,7 @@ Click on the name of a role to view that content's documentation:
 ### Roles
 Name | Description
 --- | ---
-[cloud.gcp_ops.manage_machine_image](https://github.com/ansible-collections/cloud.aws_ops/blob/main/roles/manage_machine_image/README.md)|A role to create / delete a GCP custom machine image.
+[cloud.gcp_ops.manage_machine_image](https://github.com/redhat-cop/cloud.gcp_ops/blob/main/roles/manage_machine_image/README.md)|A role to create / delete a GCP custom machine image.
 
 ### Playbooks
 Name | Description

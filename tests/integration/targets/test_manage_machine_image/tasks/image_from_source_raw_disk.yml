@@ -42,15 +42,15 @@
         that:
           - test_manage_machine_image__bucket_create.changed == true
 
-    # # Lack permissions to create a role
+    # Lack permissions to create a role
     # - name: Create a role
     #   google.cloud.gcp_iam_role:
     #     name: "{{ role_name }}"
     #     title: A Custom Role
     #     description: A custom role description
     #     included_permissions:
-    #       - iam.roles.compute.storageAdmin
-    #       - iam.roles.storage.objectAdmin
+    #      - iam.roles.compute.storageAdmin
+    #      - iam.roles.storage.objectAdmin
     #     state: present
     #   register: test_manage_machine_image_role_create
 
@@ -60,6 +60,7 @@
                 --image {{ source_image_name }} \
                 --project "{{ gcp_project }}" \
                 --compute-service-account "{{ gcp_cred_email }}"
+                --quiet
       changed_when: false
       register: test_manage_machine_image__raw_disk
 
