@@ -1,0 +1,3 @@
+---
+dependencies:
+  - role: cloud.gcp_ops.gcp_setup_credentials

@@ -1,0 +1,52 @@
+---
+- name: Validate auth_kind value
+  ansible.builtin.fail:
+    msg: "{{ gcp_auth_kind }} variable should be one of {{ gcp_auth_kind_choices }}"
+  when: gcp_auth_kind not in gcp_auth_kind_choices
+
+- name: Define intial value for credentials output
+  ansible.builtin.set_fact:
+    gcp_setup_credentials__output: {}
+
+- name: Set GCP auth kind
+  ansible.builtin.set_fact:
+    gcp_setup_credentials__output: "{{ gcp_setup_credentials__output | combine({'auth_kind': gcp_auth_kind}) }}"
+  no_log: true
+
+- name: Set GCP project
+  ansible.builtin.set_fact:
+    gcp_setup_credentials__output: "{{ gcp_setup_credentials__output | combine({'project': gcp_project}) }}"
+  when: gcp_project is defined
+  no_log: true
+
+- name: Set GCP scopes
+  ansible.builtin.set_fact:
+    gcp_setup_credentials__output: "{{ gcp_setup_credentials__output | combine({'scopes': gcp_scopes}) }}"
+  when: gcp_scopes is defined
+  no_log: true
+
+- name: Set GCP service account email
+  ansible.builtin.set_fact:
+    gcp_setup_credentials__output: "{{ gcp_setup_credentials__output | combine({'service_account_email': gcp_service_account_email}) }}"
+  when: gcp_service_account_email is defined
+  no_log: true
+
+- name: Set GCP access token
+  ansible.builtin.set_fact:
+    gcp_setup_credentials__output: "{{ gcp_setup_credentials__output | combine({'access_token': gcp_access_token}) }}"
+  when:
+    - gcp_access_token is defined
+    - gcp_auth_kind == "accesstoken"
+  no_log: true
+
+- name: Set GCP service account content
+  ansible.builtin.set_fact:
+    gcp_setup_credentials__output: "{{ gcp_setup_credentials__output | combine({'service_account_contents': gcp_service_account_content}) }}"
+  when: gcp_service_account_content is defined
+  no_log: true
+
+- name: Set GCP service account file
+  ansible.builtin.set_fact:
+    gcp_setup_credentials__output: "{{ gcp_setup_credentials__output | combine({'service_account_file': gcp_service_account_file}) }}"
+  when: gcp_service_account_file is defined
+  no_log: true

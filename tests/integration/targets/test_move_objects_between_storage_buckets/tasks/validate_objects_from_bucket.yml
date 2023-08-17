@@ -1,0 +1,30 @@
+---
+- name: Download content from bucket
+  block:
+    - name: Create temporary file
+      ansible.builtin.tempfile:
+        suffix: .object
+      register: _tmpfile
+
+    - name: Download objects from destination bucket
+      google.cloud.gcp_storage_object:
+        action: download
+        bucket: "{{ test_dest_storage_bucket }}"
+        src: "{{ item.name }}"
+        dest: "{{ _tmpfile.path }}"
+        auth_kind: "{{ gcp_auth_kind }}"
+        service_account_file: "{{ gcp_cred_file }}"
+        project: "{{ gcp_project }}"
+
+    - name: Assert that object value from Storage bucket is as expected
+      ansible.builtin.assert:
+        that:
+          - item.value == object_data
+      vars:
+        object_data: "{{ lookup('file', _tmpfile.path) }}"
+
+  always:
+    - name: Delete temporary file
+      ansible.builtin.file:
+        state: absent
+        path: "{{ _tmpfile.path }}"

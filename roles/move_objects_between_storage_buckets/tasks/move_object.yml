@@ -1,0 +1,24 @@
+---
+- name: 'Move single object from source bucket into destination bucket'
+  module_defaults:
+    group/gcp: "{{ gcp_setup_credentials__output }}"
+  block:
+    - name: "Download object from bucket source bucket"
+      google.cloud.gcp_storage_object:
+        action: download
+        src: "{{ item }}"
+        dest: "{{ move_objects_between_storage_buckets__tmpdir.path }}/{{ item }}"
+        bucket: "{{ move_objects_between_storage_buckets_source_bucket }}"
+
+    - name: "Updload object into destination bucket"
+      google.cloud.gcp_storage_object:
+        action: upload
+        src: "{{ move_objects_between_storage_buckets__tmpdir.path }}/{{ item }}"
+        dest: "{{ item }}"
+        bucket: "{{ move_objects_between_storage_buckets_dest_bucket }}"
+
+    - name: "Delete object from source bucket"
+      google.cloud.gcp_storage_object:
+        action: delete
+        src: "{{ item }}"
+        bucket: "{{ move_objects_between_storage_buckets_source_bucket }}"

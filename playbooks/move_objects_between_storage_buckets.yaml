@@ -1,0 +1,7 @@
+---
+- name: Move objects between Storage buckets
+  hosts: localhost
+  gather_facts: false
+
+  roles:
+    - role: cloud.gcp_ops.move_objects_between_storage_buckets

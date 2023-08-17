@@ -1,0 +1,38 @@
+---
+- name: Test Role move_objects_between_storage_buckets
+  block:
+    - name: Create buckets
+      ansible.builtin.include_tasks: create_buckets.yml
+
+    - name: Move objects from source to destination storage bucket
+      ansible.builtin.include_role:
+        name: cloud.gcp_ops.move_objects_between_storage_buckets
+      vars:
+        gcp_auth_kind: "{{ gcp_cred_kind }}"
+        gcp_service_account_file: "{{ gcp_cred_file }}"
+        move_objects_between_storage_buckets_source_bucket: "{{ test_source_storage_bucket }}"
+        move_objects_between_storage_buckets_dest_bucket: "{{ test_dest_storage_bucket }}"
+        move_objects_between_storage_buckets_objects: "{{ test_bucket_objects | map(attribute='name') | list }}"
+
+    # Validate that objects were deleted from Source bucket
+    - name: Validate that objects have been removed from Source bucket
+      google.cloud.gcp_storage_object:
+        action: download
+        bucket: "{{ test_dest_storage_bucket }}"
+        src: "{{ item }}"
+        dest: "{{ item }}.txt"
+        auth_kind: "{{ gcp_auth_kind }}"
+        service_account_file: "{{ gcp_cred_file }}"
+        project: "{{ gcp_project }}"
+      with_items: "{{ test_bucket_objects }}"
+      register: _download
+      failed_when: (_download is not failed) or (_download.msg != "File does not exist in bucket")
+
+    # Validate that objects from destination are stored as expected
+    - name: Validate objects move
+      ansible.builtin.include_tasks: validate_objects_from_bucket.yml
+      with_items: "{{ test_bucket_objects }}"
+
+  always:
+    - name: Delete buckets
+      ansible.builtin.include_tasks: delete_buckets.yml

@@ -1,0 +1,8 @@
+---
+test_source_storage_bucket: "{{ resource_prefix }}-bucket-src"
+test_dest_storage_bucket: "{{ resource_prefix }}-bucket-dest"
+test_bucket_objects:
+  - name: "{{ resource_prefix }}-obj-1"
+    value: "This has been created using Ansible Seeded content Role"
+  - name: "{{ resource_prefix }}-obj-2"
+    value: "Ansible roles for managing GCP resources"
