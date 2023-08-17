@@ -1,0 +1,4 @@
+---
+gcp_storage_bucket_name: "{{ resource_prefix }}-bucket"
+gcp_service_account_file: "{{ gcp_cred_file }}"
+gcp_auth_kind: "{{ gcp_cred_kind }}"

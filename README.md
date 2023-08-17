@@ -17,6 +17,7 @@ Click on the name of a role to view that content's documentation:
 ### Roles
 Name | Description
 --- | ---
+[cloud.gcp_ops.gcp_setup_credentials](https://github.com/redhat-cop/cloud.gcp_ops/blob/main/roles/gcp_setup_credentials/README.md)|A role to define credentials for google.cloud modules.
 
 ### Playbooks
 Name | Description

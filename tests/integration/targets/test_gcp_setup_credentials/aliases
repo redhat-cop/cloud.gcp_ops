@@ -1,0 +1,3 @@
+cloud/gcp
+role/gcp_setup_credentials
+time=10s

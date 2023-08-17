@@ -1,0 +1,21 @@
+---
+- name: Include 'gcp_setup_credentials' roles
+  ansible.builtin.include_role:
+    name: cloud.gcp_ops.gcp_setup_credentials
+
+- name: Trying calling module using generating credentials
+  module_defaults:
+    group/gcp:
+      "{{ gcp_setup_credentials__output }}"
+  block:
+
+    - name: Create GCP storage bucket
+      google.cloud.gcp_storage_bucket:
+        name: "{{ gcp_storage_bucket_name }}"
+        state: present
+
+  always:
+    - name: Delete GCP storage bucket
+      google.cloud.gcp_storage_bucket:
+        name: "{{ gcp_storage_bucket_name }}"
+        state: absent
