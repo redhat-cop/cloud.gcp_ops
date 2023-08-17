@@ -8,8 +8,6 @@
       ansible.builtin.include_role:
         name: cloud.gcp_ops.move_objects_between_storage_buckets
       vars:
-        gcp_auth_kind: "{{ gcp_cred_kind }}"
-        gcp_service_account_file: "{{ gcp_cred_file }}"
         move_objects_between_storage_buckets_source_bucket: "{{ test_source_storage_bucket }}"
         move_objects_between_storage_buckets_dest_bucket: "{{ test_dest_storage_bucket }}"
         move_objects_between_storage_buckets_objects: "{{ test_bucket_objects | map(attribute='name') | list }}"
