@@ -39,7 +39,7 @@
         manage_machine_image_source_image_name: "{{ source_image_name }}"
         manage_machine_image_image_name: "{{ image_name }}"
         manage_machine_image_image_description: "{{ description }}"
-        manage_machine_image_zone: "{{ test_manage_machine_image_zone }}"
+        manage_machine_image_zone: "{{ zone }}"
 
   always:
     - name: Delete images

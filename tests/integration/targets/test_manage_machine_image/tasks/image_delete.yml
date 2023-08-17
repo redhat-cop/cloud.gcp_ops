@@ -26,7 +26,7 @@
       vars:
         manage_machine_image_operation: delete
         manage_machine_image_image_name: "{{ image_name }}"
-        manage_machine_image_zone: "{{ test_manage_machine_image_zone }}"
+        manage_machine_image_zone: "{{ zone }}"
 
   always:
     - name: Delete image
