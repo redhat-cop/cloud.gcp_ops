@@ -1,7 +1,0 @@
----
-gcp_auth_kind: serviceaccount
-gcp_auth_kind_choices:
-  - application
-  - machineaccount
-  - serviceaccount
-  - accesstoken

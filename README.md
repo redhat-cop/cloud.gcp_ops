@@ -17,7 +17,6 @@ Click on the name of a role to view that content's documentation:
 ### Roles
 Name | Description
 --- | ---
-[cloud.gcp_ops.gcp_setup_credentials](https://github.com/redhat-cop/cloud.gcp_ops/blob/main/roles/gcp_setup_credentials/README.md)|A role to define credentials for google.cloud modules.
 [cloud.gcp_ops.move_objects_between_storage_buckets](https://github.com/redhat-cop/cloud.gcp_ops/blob/main/roles/move_objects_between_storage_buckets/README.md)|A role to move objects between GCP Storage buckets.
 
 ### Playbooks
