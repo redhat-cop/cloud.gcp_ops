@@ -1,5 +1,0 @@
----
-trivial:
-  - Add changelogs directory and config (https://github.com/redhat-cop/cloud.gcp_ops/pull/6).
-  - Add tests directory (https://github.com/redhat-cop/cloud.gcp_ops/pull/6).
-  - Add milestone/python 3.9 to the sanity test exclude matrix since 3.9 is no longer supported in milestone (https://github.com/redhat-cop/cloud.gcp_ops/pull/6).
