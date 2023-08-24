@@ -1,3 +1,4 @@
+---
 name: Sanity
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
