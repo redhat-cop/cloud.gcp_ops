@@ -1,3 +1,4 @@
+---
 name: Sanity
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -52,6 +53,10 @@ jobs:
             {
               "ansible-version": "milestone",
               "python-version": "3.8"
+            },
+            {
+              "ansible-version": "milestone",
+              "python-version": "3.9"
             },
             {
               "ansible-version": "devel",
