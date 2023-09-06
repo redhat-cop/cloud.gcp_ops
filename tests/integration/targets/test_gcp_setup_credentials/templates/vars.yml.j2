@@ -1,0 +1,13 @@
+---
+gcp_service_account_content: "{{ gcp_service_account_content }}"
+gcp_service_account_file: "{{ gcp_service_account_file }}"
+gcp_service_account_email: "{{ gcp_service_account_email }}"
+gcp_project: "{{ gcp_project }}"
+gcp_scopes: "{{ gcp_scopes }}"
+gcp_setup_credentials__expected:
+  auth_kind: serviceaccount
+  project: "{{ gcp_project }}"
+  scopes: "{{ gcp_scopes }}"
+  service_account_email: "{{ gcp_service_account_email }}"
+  service_account_contents: "{{ gcp_service_account_content }}"
+  service_account_file: "{{ gcp_service_account_file }}"

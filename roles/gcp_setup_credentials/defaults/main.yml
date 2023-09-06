@@ -5,3 +5,10 @@ gcp_auth_kind_choices:
   - machineaccount
   - serviceaccount
   - accesstoken
+gcp_auth_kind_env_var: GCP_AUTH_KIND
+gcp_service_account_content_env_var: GCP_SERVICE_ACCOUNT_CONTENTS
+gcp_service_account_file_env_var: GCP_SERVICE_ACCOUNT_FILE
+gcp_service_account_email_env_var: GCP_SERVICE_ACCOUNT_EMAIL
+gcp_access_token_env_var: GCP_ACCESS_TOKEN
+gcp_project_env_var: GCP_PROJECT
+gcp_scopes_env_var: GCP_SCOPES

@@ -1,0 +1,25 @@
+- name: Create required file for tests
+  hosts: localhost
+  gather_facts: false
+
+  vars:
+    gcp_service_account_content: "key-{{ resource_prefix }}=data-{{ resource_prefix }}"
+    gcp_service_account_file: "{{ resource_prefix }}"
+    gcp_service_account_email: "{{ resource_prefix }}-mail@{{ resource_prefix }}.com"
+    gcp_project: "ansible-{{ resource_prefix }}"
+    gcp_scopes: "scopes-{{ resource_prefix }}"
+    gcp_access_token: "token-{{ resource_prefix }}"
+
+  tasks:
+    - name: Create ansible variables file
+      ansible.builtin.template:
+        src: "{{ item.template }}"
+        dest: "{{ item.dest }}"
+        mode: '0755'
+      with_items:
+        - template: templates/vars.yml.j2
+          dest: vars.yml
+        - template: templates/access_token.yml.j2
+          dest: access_token.yml
+        - template: templates/set_env.sh.j2
+          dest: set_env.sh

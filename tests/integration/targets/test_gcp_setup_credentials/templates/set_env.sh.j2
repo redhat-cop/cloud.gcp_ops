@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+set -eux
+
+export GCP_AUTH_KIND=accesstoken
+export GCP_SERVICE_ACCOUNT_CONTENTS="{{ gcp_service_account_content }}"
+export GCP_SERVICE_ACCOUNT_FILE="{{ gcp_service_account_file }}"
+export GCP_SERVICE_ACCOUNT_EMAIL="{{ gcp_service_account_email }}"
+export GCP_ACCESS_TOKEN="{{ gcp_access_token }}"
+export GCP_PROJECT="{{ gcp_project }}"
+export GCP_SCOPES="{{ gcp_scopes }}"

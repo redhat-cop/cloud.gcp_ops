@@ -1,52 +1,106 @@
 ---
+# GCP auth kind validation
+- name: Set authentication kind
+  ansible.builtin.set_fact:
+    gcp_auth_kind: "{{ gcp_auth_kind_from_env_var | d(gcp_auth_kind) }}"
+  vars:
+    gcp_auth_kind_from_env_var: "{{ lookup('env', gcp_auth_kind_env_var, default=undef()) }}"
+
 - name: Validate auth_kind value
   ansible.builtin.fail:
     msg: "{{ gcp_auth_kind }} variable should be one of {{ gcp_auth_kind_choices }}"
   when: gcp_auth_kind not in gcp_auth_kind_choices
 
-- name: Define intial value for credentials output
-  ansible.builtin.set_fact:
-    gcp_setup_credentials__output: {}
-
 - name: Set GCP auth kind
   ansible.builtin.set_fact:
-    gcp_setup_credentials__output: "{{ gcp_setup_credentials__output | combine({'auth_kind': gcp_auth_kind}) }}"
-  no_log: true
+    gcp_setup_credentials__output:
+      auth_kind: "{{ gcp_auth_kind }}"
 
-- name: Set GCP project
+# GCP Project
+- name: Set GCP project from variable
   ansible.builtin.set_fact:
     gcp_setup_credentials__output: "{{ gcp_setup_credentials__output | combine({'project': gcp_project}) }}"
   when: gcp_project is defined
-  no_log: true
 
+- name: Set GCP project from environment variable
+  ansible.builtin.set_fact:
+    gcp_setup_credentials__output: "{{ gcp_setup_credentials__output | combine({'project': gcp_project_env}) }}"
+  when: gcp_project_env is defined
+  vars:
+    gcp_project_env: "{{ lookup('env', gcp_project_env_var, default=undef()) }}"
+
+# GCP Scopes
 - name: Set GCP scopes
   ansible.builtin.set_fact:
     gcp_setup_credentials__output: "{{ gcp_setup_credentials__output | combine({'scopes': gcp_scopes}) }}"
   when: gcp_scopes is defined
   no_log: true
 
+- name: Set GCP scopes from environment variable
+  ansible.builtin.set_fact:
+    gcp_setup_credentials__output: "{{ gcp_setup_credentials__output | combine({'scopes': gcp_scopes_env}) }}"
+  when: gcp_scopes_env is defined
+  vars:
+    gcp_scopes_env: "{{ lookup('env', gcp_scopes_env_var, default=undef()) }}"
+  no_log: true
+
+# GCP access token
+- name: Set GCP access token when auth_kind is set to 'accesstoken'
+  when: gcp_auth_kind == "accesstoken"
+  block:
+    - name: Set GCP access token
+      ansible.builtin.set_fact:
+        gcp_setup_credentials__output: "{{ gcp_setup_credentials__output | combine({'access_token': gcp_access_token}) }}"
+      when: gcp_access_token is defined
+      no_log: true
+
+    - name: Set GCP access token from environment variable
+      ansible.builtin.set_fact:
+        gcp_setup_credentials__output: "{{ gcp_setup_credentials__output | combine({'access_token': gcp_access_token_env}) }}"
+      when: gcp_access_token_env is defined
+      vars:
+        gcp_access_token_env: "{{ lookup('env', gcp_access_token_env_var, default=undef()) }}"
+      no_log: true
+
+# GCP Service account email
 - name: Set GCP service account email
   ansible.builtin.set_fact:
     gcp_setup_credentials__output: "{{ gcp_setup_credentials__output | combine({'service_account_email': gcp_service_account_email}) }}"
   when: gcp_service_account_email is defined
   no_log: true
 
-- name: Set GCP access token
+- name: Set GCP service account email from environment variable
   ansible.builtin.set_fact:
-    gcp_setup_credentials__output: "{{ gcp_setup_credentials__output | combine({'access_token': gcp_access_token}) }}"
-  when:
-    - gcp_access_token is defined
-    - gcp_auth_kind == "accesstoken"
+    gcp_setup_credentials__output: "{{ gcp_setup_credentials__output | combine({'service_account_email': gcp_service_account_email_env}) }}"
+  when: gcp_service_account_email_env is defined
+  vars:
+    gcp_service_account_email_env: "{{ lookup('env', gcp_service_account_email_env_var, default=undef()) }}"
   no_log: true
 
-- name: Set GCP service account content
+# GCP Service account content
+- name: Set GCP service account content from variable
   ansible.builtin.set_fact:
     gcp_setup_credentials__output: "{{ gcp_setup_credentials__output | combine({'service_account_contents': gcp_service_account_content}) }}"
   when: gcp_service_account_content is defined
   no_log: true
 
-- name: Set GCP service account file
+- name: Set GCP service account content from environment variable
+  ansible.builtin.set_fact:
+    gcp_setup_credentials__output: "{{ gcp_setup_credentials__output | combine({'service_account_contents': gcp_service_account_content_env}) }}"
+  when: gcp_service_account_content_env is defined
+  vars:
+    gcp_service_account_content_env: "{{ lookup('env', gcp_service_account_content_env_var, default=undef()) }}"
+
+# GCP Service account file
+- name: Set GCP service account file from variable
   ansible.builtin.set_fact:
     gcp_setup_credentials__output: "{{ gcp_setup_credentials__output | combine({'service_account_file': gcp_service_account_file}) }}"
   when: gcp_service_account_file is defined
   no_log: true
+
+- name: Set GCP service account file from environment variable
+  ansible.builtin.set_fact:
+    gcp_setup_credentials__output: "{{ gcp_setup_credentials__output | combine({'service_account_file': gcp_service_account_file_env}) }}"
+  when: gcp_service_account_file_env is defined
+  vars:
+    gcp_service_account_file_env: "{{ lookup('env', gcp_service_account_file_env_var, default=undef()) }}"

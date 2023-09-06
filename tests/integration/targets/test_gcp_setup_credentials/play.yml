@@ -1,0 +1,20 @@
+- name: Test Role cloud.gcp_ops.gcp_setup_credentials
+  hosts: localhost
+  gather_facts: false
+
+  roles:
+    - role: cloud.gcp_ops.gcp_setup_credentials
+
+  tasks:
+    - name: Display variable 'gcp_setup_credentials__output'
+      ansible.builtin.debug:
+        var: gcp_setup_credentials__output
+
+    - name: Display variable 'gcp_setup_credentials__expected'
+      ansible.builtin.debug:
+        var: gcp_setup_credentials__expected
+
+    - name: Ensure role define credentials as expected
+      ansible.builtin.assert:
+        that:
+          - gcp_setup_credentials__output == gcp_setup_credentials__expected
