@@ -1,0 +1,5 @@
+---
+- name: Run 'manage_http_cloud_function' rolepi
+  block:
+    - name: Include file
+      ansible.builtin.include_tasks: "{{ operation }}.yaml"

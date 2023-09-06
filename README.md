@@ -22,6 +22,8 @@ Name | Description
 Name | Description
 --- | ---
 <!--end collection content-->
+[cloud.gcp_ops.manage_http_cloud_function](https://github.com/redhat-cop/cloud.gcp_ops/roles/manage_http_cloud_function)|A role to manage http cloud functions in GCP.
+
 
 ## Installation and Usage
 
