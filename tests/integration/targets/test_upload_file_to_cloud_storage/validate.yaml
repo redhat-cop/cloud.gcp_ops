@@ -36,4 +36,3 @@
           ansible.builtin.file:
             state: absent
             path: "{{ _tempfile.path }}"
-          ignore_errors: true

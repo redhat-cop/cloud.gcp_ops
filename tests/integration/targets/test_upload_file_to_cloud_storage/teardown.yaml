@@ -15,10 +15,10 @@
         action: delete
         bucket: "{{ test_bucket_name }}"
         src: "{{ test_file_path | basename }}"
-      ignore_errors: true
+      register: delete_result
+      failed_when: (delete_result is failed) and (delete_result.msg != "File does not exist in bucket")
 
     - name: Delete GCP storage bucket created for test
       google.cloud.gcp_storage_bucket:
         name: "{{ test_bucket_name }}"
         state: absent
-      ignore_errors: true
