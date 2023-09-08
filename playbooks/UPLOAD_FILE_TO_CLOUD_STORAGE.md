@@ -8,6 +8,7 @@ GCP user account with at minimum the storage.objectCreator IAM role or equivalen
 
 ## Playbook Variables
 
+* **host_with_file**: Name of the remote host with file to upload to. Default: `"all"`.
 * **upload_file_to_cloud_storage_bucket**: The name of the GCP storage bucket to upload the file to. **Required**
 * **upload_file_to_cloud_storage_file_path**: Path to file to upload. **Required**
 * **upload_file_to_cloud_storage_object_name**: The name to give the object in cloud storage. If not provided, defaults to the base file name (without path) of `upload_file_to_cloud_storage_file_path`.
