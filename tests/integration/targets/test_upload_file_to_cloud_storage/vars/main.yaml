@@ -1,0 +1,3 @@
+---
+test_bucket_name: "{{ resource_prefix }}-bucket"
+test_file_path: "{{ playbook_dir }}/files/testfile.txt"

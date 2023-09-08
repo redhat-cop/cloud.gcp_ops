@@ -1,0 +1,24 @@
+---
+- name: Delete files used for testing
+  hosts: localhost
+  gather_facts: false
+
+  vars_files:
+    - vars/main.yaml
+
+  module_defaults:
+    group/gcp: "{{ gcp_setup_credentials__output }}"
+
+  tasks:
+    - name: Delete GCP storage object created for test
+      google.cloud.gcp_storage_object:
+        action: delete
+        bucket: "{{ test_bucket_name }}"
+        src: "{{ test_file_path | basename }}"
+      ignore_errors: true
+
+    - name: Delete GCP storage bucket created for test
+      google.cloud.gcp_storage_bucket:
+        name: "{{ test_bucket_name }}"
+        state: absent
+      ignore_errors: true

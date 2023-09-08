@@ -1,0 +1,7 @@
+---
+auth_kind: "{{ gcp_setup_credentials__output.auth_kind }}"
+project: "{{ gcp_setup_credentials__output.project }}"
+service_account_file: "{{ gcp_setup_credentials__output.service_account_file }}"
+
+upload_file_to_cloud_storage_bucket: "{{ test_bucket_name }}"
+upload_file_to_cloud_storage_file_path: "{{ test_file_path }}"

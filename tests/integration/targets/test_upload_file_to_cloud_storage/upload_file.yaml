@@ -1,0 +1,15 @@
+---
+- name: Initialize resources for tests
+  hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: Debug playbook directory
+      ansible.builtin.debug:
+        msg: "{{ playbook_dir }}"
+
+    - name: Debug vars
+      ansible.builtin.debug:
+        var: vars
+
+- name: Import playbook 'cloud.gcp_ops.upload_file_to_cloud_storage'
+  ansible.builtin.import_playbook: cloud.gcp_ops.upload_file_to_cloud_storage

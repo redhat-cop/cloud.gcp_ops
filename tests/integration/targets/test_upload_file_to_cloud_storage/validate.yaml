@@ -1,0 +1,39 @@
+---
+- name: Validate uploaded file content
+  hosts: localhost
+  gather_facts: false
+
+  vars_files:
+    - vars/main.yaml
+
+  module_defaults:
+    group/gcp: "{{ gcp_setup_credentials__output }}"
+
+  tasks:
+    - name: Create temporary file to download object content to
+      ansible.builtin.tempfile:
+      register: _tempfile
+
+    - name: Download file from cloud storage and validate content
+      block:
+        - name: Download uploaded file
+          google.cloud.gcp_storage_object:
+            action: download
+            bucket: "{{ test_bucket_name }}"
+            src: "{{ test_file_path | basename }}"
+            dest: "{{ _tempfile.path }}"
+
+        - name: Validate content
+          ansible.builtin.assert:
+            that:
+              - uploaded_content == local_content
+          vars:
+            uploaded_content: "{{ lookup('file', _tempfile.path) }}"
+            local_content: "{{ lookup('file', test_file_path) }}"
+
+      always:
+        - name: Delete tempfile created for test
+          ansible.builtin.file:
+            state: absent
+            path: "{{ _tempfile.path }}"
+          ignore_errors: true

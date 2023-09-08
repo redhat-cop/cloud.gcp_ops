@@ -21,6 +21,7 @@ Name | Description
 ### Playbooks
 Name | Description
 --- | ---
+[cloud.gcp_ops.upload_file_to_cloud_storage](https://github.com/redhat-cop/cloud.gcp_ops/blob/main/playbooks/UPLOAD_FILE_TO_CLOUD_STORAGE.md)|A playbook to upload a local file to GCP Cloud Storage.
 <!--end collection content-->
 
 ## Installation and Usage
