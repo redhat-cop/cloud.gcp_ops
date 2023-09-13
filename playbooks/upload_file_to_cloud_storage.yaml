@@ -1,6 +1,6 @@
 ---
 - name: Upload a file to GCP Cloud Storage
-  hosts: "{{ host_with_file | default('all') }}"
+  hosts: "{{ upload_file_to_cloud_storage_host | default('all') }}"
   gather_facts: false
   module_defaults:
     group/gcp:
