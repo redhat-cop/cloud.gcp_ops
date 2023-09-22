@@ -1,0 +1,76 @@
+---
+- name: Run 'cloud.gcp_ops.import_image_and_run_gcp_instance' role
+  module_defaults:
+    group/gcp: "{{ gcp_setup_credentials__output }}"
+
+  block:
+    - name: Fail when 'import_image_and_run_gcp_instance_bucket_name' is undefined
+      ansible.builtin.fail:
+        msg: Storage bucket name to host the .raw image must be defined as import_image_and_run_gcp_instance_bucket_name
+      when: import_image_and_run_gcp_instance_bucket_name is undefined
+
+    - name: Fail when 'import_image_and_run_gcp_instance_image_path' is undefined
+      ansible.builtin.fail:
+        msg: The .raw image path must be defined as import_image_and_run_aws_instance_image_path
+      when: import_image_and_run_aws_instance_image_path is undefined
+
+    - name: Fail when 'import_image_and_run_gcp_instance_instance_name' is undefined
+      ansible.builtin.fail:
+        msg: The name to assign to the GCP instance must be defined as import_image_and_run_gcp_instance_instance_name
+      when: import_image_and_run_gcp_instance_instance_name is undefined
+
+    # we do not have a gcp_storage_bucket_info module
+
+    - name: Set 'import_image_and_run_aws_instance__s3_object_key' variable
+      ansible.builtin.set_fact:
+        import_image_and_run_gcp_instance__object_key: "{{ import_image_and_run_gcp_instance_bucket_name }}/{{ import_image_and_run_aws_instance_instance_name }}.raw"
+
+    - name: Upload raw image to Storage bucket
+      google.cloud.gcp_storage_object:
+        bucket: "{{ import_image_and_run_gcp_instance_bucket_name }}"
+        dest: "{{ import_image_and_run_gcp_instance__object_key }}"
+        src: "{{ import_image_and_run_gcp_instance_image_path }}"
+        action: upload
+      register: import_image_and_run_gcp_instance__upload_image
+
+    - name: Import image
+      google.cloud.gcp_compute_image:
+        state: present
+        zone: "{{ import_image_and_run_gcp_instance_zone }}"
+        name: "{{ import_image_and_run_gcp_instance_import_image_name }}"
+        source_type: "RAW"
+        source_image: "{{ import_image_and_run_gcp_instance__upload_image }}"
+      register: import_image_and_run_gcp_instance__import_result
+
+    - name: Check status of the import image task
+      google.cloud.gcp_compute_image_info:
+        zone: "{{ import_image_and_run_gcp_instance_zone }}"
+        filters:
+          - name = "{{ import_image_and_run_gcp_instance_import_image_name }}"
+      register: import_image_and_run_gcp_instance__import_image_info
+
+    - name: Check if an instance with the specified name alrerady exists
+      cloud.gcp.gcp_compute_instance_info:
+        zone: "{{ import_image_and_run_gcp_instance_zone }}"
+        filters:
+          - name = "{{ import_image_and_run_gcp_instance_instance_name }}"
+      register: import_image_and_run_aws_instance__gcp_instance_info
+
+    - name: Fail when an instance with the specified name already exists
+      ansible.builtin.fail:
+        msg: "A GCP compute instance with name {{ import_image_and_run_gcp_instance_instance_name }} already exists"
+      when: import_image_and_run_gcp_instance__gcp_instance_info.instances | length == 1
+
+    - name: Start GCP compute instance
+      cloud.gcp.gcp_compute_instance:
+        zone: "{{ import_image_and_run_gcp_instance_zone }}"
+        name: "{{ import_image_and_run_gcp_instance_instance_name }}"
+        image: "{{ import_image_and_run_gcp_instance_import_image_name }}"
+        deletion_protection: "{{ import_image_and_run_gcp_instance_deletion_protection | default(omit) }}"
+        labels: "{{ import_image_and_run_gcp_instance_labels | default(omit) }}"
+        metadata: "{{ import_image_and_run_gcp_instance_metadata | default(omit) }}"
+        machine_type: "{{ import_image_and_run_gcp_instance_machine_type | default(omit) }}"
+        network_interfaces: "{{ import_image_and_run_gcp_instance_network_interfaces | default(omit) }}"
+        scheduling: "{{ import_image_and_run_gcp_instance_scheduling | default(omit) }}"
+        service_accounts: "{{ import_image_and_run_gcp_instance_service_accounts | default(omit) }}"
+        tags: "{{ import_image_and_run_gcp_instance_tags | default(omit) }}"
