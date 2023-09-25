@@ -50,7 +50,7 @@
       register: import_image_and_run_gcp_instance__import_image_info
 
     - name: Check if an instance with the specified name alrerady exists
-      cloud.gcp.gcp_compute_instance_info:
+      google.cloud.gcp_compute_instance_info:
         zone: "{{ import_image_and_run_gcp_instance_zone }}"
         filters:
           - name = "{{ import_image_and_run_gcp_instance_instance_name }}"
@@ -62,7 +62,7 @@
       when: import_image_and_run_gcp_instance__gcp_instance_info.instances | length == 1
 
     - name: Start GCP compute instance
-      cloud.gcp.gcp_compute_instance:
+      google.cloud.gcp_compute_instance:
         zone: "{{ import_image_and_run_gcp_instance_zone }}"
         name: "{{ import_image_and_run_gcp_instance_instance_name }}"
         image: "{{ import_image_and_run_gcp_instance_import_image_name }}"
