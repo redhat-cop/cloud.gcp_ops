@@ -1,7 +1,8 @@
-- hosts: localhost
+- name: Playbook to migrate an existing on prem VM running on KVM hypervisor to GCP
+  hosts: localhost
   gather_facts: false
 
-  vars_file:
+  vars_files:
     - vars/main.yml
 
   tasks:

@@ -15,30 +15,18 @@ Role Variables
 --------------
 
 * **import_image_and_run_gcp_instance_import_image_name**: (Required) The name you want to assign to the GCP custom image.
-
 * **import_image_and_run_gcp_instance_bucket_name**: (Required) The name of the GCP storage bucket name where you want to upload the .raw image. It must exist in the region the instance is created.
-
 * **import_image_and_run_gcp_instance_image_path**: (Required) The path where the .raw image is stored.
-
 * **import_image_and_run_gcp_instance_instance_name**: (Required) The name of the GCP compute instance you want to create using the imported custom image.
-
 * **import_image_and_run_gcp_instance_deletion_protection** (bool): (Optional) Whether the resource should be protected against deletion.
-
 * **import_image_and_run_gcp_instance_labels** (dict): (Optional) Labels to apply to this instance. A list of key->value pairs.
-
 * **import_image_and_run_gcp_instance_metadata** (dict): (Optional) The metadata key/value pairs to assign to instances that are created from this template. These pairs can consist of custom metadata or predefined keys.
-
 * **import_image_and_run_gcp_instance_machine_type** (str): (Optional) A reference to a machine type which defines VM kind.
-
-* **import_image_and_run_gcp_instance_network_interfaces** (list): (Optional) An array of configurations for this interface. This specifies how this interface is configured to interact with other network services, such as connecting to the internet. Only one network interface is supported per instance.
-
 * **import_image_and_run_gcp_instance_scheduling** (dict): (Optional) Sets the scheduling options for this instance.
-
 * **import_image_and_run_gcp_instance_service_accounts** (list): (Optional) A list of service accounts, with their specified scopes, authorized for this instance. Only one service account per VM instance is supported.
-
 * **import_image_and_run_gcp_instance_tags** (list): (Optional) A list of tags to apply to this instance. Tags are used to identify valid sources or targets for network firewalls and are specified by the client during instance creation. The tags can be later modified by the setTags method. Each tag within the list must comply with RFC1035.
-
-* **import_image_and_run_gcp_zone** (str): (Optional) A reference to the zone where the compute machines reside. If not set, it defaults to 'us-central1-a'.
+* **import_image_and_run_gcp_instance_network_interfaces** (list): (Required) An array of configurations for this interface. This specifies how this interface is configured to interact with other network services, such as connecting to the internet. At least one network interface is required. For a full list of parameters visit https://docs.ansible.com/ansible/latest/collections/google/cloud/gcp_compute_instance_module.html#parameter-network_interfaces. It must exist in the region the instance is created.
+* **import_image_and_run_gcp_zone** (str): (Optional) A reference to the zone where the compute machine resides. If not set, it defaults to 'us-central1-a'.
 
 Dependencies
 ------------
@@ -62,9 +50,17 @@ This role can be used together with the [cloud.gcp_ops.clone_on_prem_vm](../clon
           name: kvm
           ansible_host: 192.168.1.117
           ansible_user: vagrant
+          groups: "libvirt"
           ansible_ssh_private_key_file: ~/.ssh/id_rsa.pub
         machine_type: "t2.micro"
         import_image_name: "import-clone"
+        network_interfaces:
+          - network: "network-instance-clone-vm"
+            access_configs:
+            - name: External NAT
+              nat_ip:
+                address: "35.188.61.177"
+              type: ONE_TO_ONE_NAT
 
       tasks:
         - name: Add host to inventory
@@ -73,7 +69,7 @@ This role can be used together with the [cloud.gcp_ops.clone_on_prem_vm](../clon
             ansible_host: "{{ kvm_host.ansible_host }}"
             ansible_user: "{{ kvm_host.ansible_user }}"
             ansible_ssh_common_args: -o "UserKnownHostsFile=/dev/null" -o StrictHostKeyChecking=no -i {{ kvm_host.ansible_ssh_private_key_file }}
-            groups: "libvirt"
+            groups: "{{ kvm_host.groups }}"
 
         - name: Import 'cloud.gcp_ops.clone_on_prem_vm' role
           ansible.builtin.import_role:
@@ -91,8 +87,9 @@ This role can be used together with the [cloud.gcp_ops.clone_on_prem_vm](../clon
             import_image_and_run_gcp_instance_bucket_name: "{{ bucket_name }}"
             import_image_and_run_gcp_instance_image_path: "{{ clone_on_prem_vm_local_image_path }}"
             import_image_and_run_gcp_instance_instance_name: "{{ instance_name }}"
-            import_image_and_run_aws_instance_machine_type: "{{ instance_type }}"
-            import_image_and_run_aws_instance_import_image_name: "{{ import_image_name }}"
+            import_image_and_run_gcp_instance_machine_type: "{{ machine_type }}"
+            import_image_and_run_gcp_instance_import_image_name: "{{ import_image_name }}"
+            import_image_and_run_gcp_instance_network_interfaces: "{{ network_interfaces }}"
 
 License
 -------

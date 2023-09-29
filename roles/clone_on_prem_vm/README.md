@@ -11,11 +11,11 @@ Requirements
 Role Variables
 --------------
 
-* **clone_on_prem_vm_source_vm_name**: (Required) The name of the on-prem VM you want to clone.
-* **clone_on_prem_vm_image_name**: The name you want to call the cloned image. If not set, the **clone_on_prem_vm_source_vm_name** will be used with a _-clone_ suffix.
-* **clone_on_prem_vm_overwrite**: Weather to overwrite or not an already existing on prem VM clone. Default: true.
-* **clone_on_prem_vm_local_image_path**: The path where you would like to save the image. If the path does not exists on localhost, the role will create it. If this parameter is not set, the role will save the image in a _~/tmp_ folder.
-* **clone_on_prem_vm_uri**: Libvirt connection uri. Default: "qemu:///system".
+* **clone_on_prem_vm_source_vm_name** (str): (Required) The name of the on-prem VM you want to clone.
+* **clone_on_prem_vm_image_name** (str): (Optional) The name you want to call the cloned image. If not set, the **clone_on_prem_vm_source_vm_name** will be used with a _-clone_ suffix.
+* **clone_on_prem_vm_overwrite** (bool): (Optional) Weather to overwrite or not an already existing on prem VM clone. Default: true.
+* **clone_on_prem_vm_local_image_path** (sr): (Optional) The path where you would like to save the image. If the path does not exists on localhost, the role will create it. If this parameter is not set, the role will save the image in a _~/tmp_ folder.
+* **clone_on_prem_vm_uri** (str): (Optional) Libvirt connection uri. Default: "qemu:///system".
 
 Dependencies
 ------------
@@ -36,6 +36,7 @@ Example Playbook
           name: kvm
           ansible_host: 192.168.1.117
           ansible_user: vagrant
+          groups: "libvirt"
           ansible_ssh_private_key_file: ~/.ssh/id_rsa.pub
 
       tasks:
@@ -45,7 +46,7 @@ Example Playbook
             ansible_host: "{{ kvm_host.ansible_host }}"
             ansible_user: "{{ kvm_host.ansible_user }}"
             ansible_ssh_common_args: -o "UserKnownHostsFile=/dev/null" -o StrictHostKeyChecking=no -i {{ kvm_host.ansible_ssh_private_key_file }}
-            groups: "libvirt"
+            groups: "{{ kvm_host.groups }}"
 
         - name: Import 'cloud.gcp_ops.clone_on_prem_vm' role
           ansible.builtin.import_role:

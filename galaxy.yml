@@ -17,6 +17,8 @@ tags:
   - infrastructure
 dependencies:
   google.cloud: '>=1.2.0'
+  community.libvirt: '>=1.2.0'
+  community.general: '>=7.4.0'
 build_ignore:
   - .DS_Store
   - '*.tar.gz'

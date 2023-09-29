@@ -11,15 +11,13 @@
 
     - name: Fail when 'import_image_and_run_gcp_instance_image_path' is undefined
       ansible.builtin.fail:
-        msg: The .raw image path must be defined as import_image_and_run_aws_instance_image_path
-      when: import_image_and_run_aws_instance_image_path is undefined
+        msg: The .raw image path must be defined as import_image_and_run_gcp_instance_image_path
+      when: import_image_and_run_gcp_instance_image_path is undefined
 
     - name: Fail when 'import_image_and_run_gcp_instance_instance_name' is undefined
       ansible.builtin.fail:
         msg: The name to assign to the GCP instance must be defined as import_image_and_run_gcp_instance_instance_name
       when: import_image_and_run_gcp_instance_instance_name is undefined
-
-    # we do not have a gcp_storage_bucket_info module
 
     - name: Create temporary directory where to store the archive
       ansible.builtin.tempfile:
@@ -29,23 +27,39 @@
       notify:
         - "Delete temporary directory"
 
+    - name: Check if 'import_image_and_run_gcp_instance_image_path' exists
+      ansible.builtin.stat:
+        path: "{{ import_image_and_run_gcp_instance_image_path }}"
+      register: import_image_and_run_gcp_instance__image_path
+
+    - name: Fail when 'import_image_and_run_gcp_instance_image_path' does not exist
+      ansible.builtin.fail:
+        msg: "The {{ import_image_and_run_gcp_instance_image_path }} does not exist"
+      when: not import_image_and_run_gcp_instance__image_path.stat.exists
+
+    - name: Rename .raw file to disk.raw
+      ansible.builtin.copy:
+        src: "{{ import_image_and_run_gcp_instance_image_path }}"
+        dest: "{{ import_image_and_run_gcp_instance__dir.path }}/disk.raw"
+
     - name: Set 'import_image_and_run_aws_instance__s3_object_key' variable
       ansible.builtin.set_fact:
-        import_image_and_run_gcp_instance__archive_path: "{{ import_image_and_run_gcp_instance__dir }}/{{ import_image_and_run_aws_instance_instance_name }}.tar.gz"
-        import_image_and_run_gcp_instance__object_key: "{{ import_image_and_run_gcp_instance_bucket_name }}/{{ import_image_and_run_aws_instance_instance_name }}.tar.gz"
+        import_image_and_run_gcp_instance__archive_path: "{{ import_image_and_run_gcp_instance__dir.path }}/disk.tar.gz"
+        import_image_and_run_gcp_instance__object_key: "{{ import_image_and_run_gcp_instance_bucket_name }}/disk.tar.gz"
+
+    - name: Gather facts on host
+      setup:
 
     - name: Create a tar.gz archive of a the .raw image
-      community.general.archive:
-        path: "{{ import_image_and_run_gcp_instance_image_path }}"
-        dest: "{{ import_image_and_run_gcp_instance__archive_path }}"
-        format: gz
-        force_archive: true
+      shell: "{{ 'gtar' if 'Darwin' in ansible_facts['system'] else 'tar' }} --format=oldgnu -Sczf disk.tar.gz disk.raw"
+      args:
+        chdir: "{{ import_image_and_run_gcp_instance__dir.path }}"
 
     - name: Upload archive to Storage bucket
       google.cloud.gcp_storage_object:
         bucket: "{{ import_image_and_run_gcp_instance_bucket_name }}"
         dest: "{{ import_image_and_run_gcp_instance__object_key }}"
-        src: "{{ import_image_and_run_gcp_instance_image_path }}"
+        src: "{{ import_image_and_run_gcp_instance__archive_path }}"
         action: upload
       register: import_image_and_run_gcp_instance__upload_image
 
@@ -53,7 +67,8 @@
       google.cloud.gcp_compute_image:
         state: present
         name: "{{ import_image_and_run_gcp_instance_import_image_name }}"
-        source_image: "{{ import_image_and_run_gcp_instance__upload_image }}"
+        raw_disk:
+          source: "{{ import_image_and_run_gcp_instance__upload_image }}"
       register: import_image_and_run_gcp_instance__import_result
 
     - name: Check status of the import image task
@@ -67,23 +82,27 @@
         zone: "{{ import_image_and_run_gcp_instance_zone }}"
         filters:
           - name = "{{ import_image_and_run_gcp_instance_instance_name }}"
-      register: import_image_and_run_aws_instance__gcp_instance_info
+      register: import_image_and_run_gcp_instance__gcp_instance_info
 
     - name: Fail when an instance with the specified name already exists
       ansible.builtin.fail:
         msg: "A GCP compute instance with name {{ import_image_and_run_gcp_instance_instance_name }} already exists"
-      when: import_image_and_run_gcp_instance__gcp_instance_info.instances | length == 1
+      when: import_image_and_run_gcp_instance__gcp_instance_info.resources | length == 1
 
     - name: Start GCP compute instance
       google.cloud.gcp_compute_instance:
-        zone: "{{ import_image_and_run_gcp_instance_zone }}"
+        zone: "{{ import_image_and_run_gcp_instance_zone)}}"
         name: "{{ import_image_and_run_gcp_instance_instance_name }}"
-        image: "{{ import_image_and_run_gcp_instance_import_image_name }}"
         deletion_protection: "{{ import_image_and_run_gcp_instance_deletion_protection | default(omit) }}"
         labels: "{{ import_image_and_run_gcp_instance_labels | default(omit) }}"
         metadata: "{{ import_image_and_run_gcp_instance_metadata | default(omit) }}"
-        machine_type: "{{ import_image_and_run_gcp_instance_machine_type | default(omit) }}"
-        network_interfaces: "{{ import_image_and_run_gcp_instance_network_interfaces | default(omit) }}"
+        machine_type: "{{ import_image_and_run_gcp_instance_machine_type }}"
+        network_interfaces: "{{ import_image_and_run_gcp_instance_network_interfaces }}"
         scheduling: "{{ import_image_and_run_gcp_instance_scheduling | default(omit) }}"
         service_accounts: "{{ import_image_and_run_gcp_instance_service_accounts | default(omit) }}"
         tags: "{{ import_image_and_run_gcp_instance_tags | default(omit) }}"
+        disks:
+          - auto_delete: 'true'
+            boot: 'true'
+            initialize_params:
+              source_image: "{{ import_image_and_run_gcp_instance__import_result.selfLink }}"
