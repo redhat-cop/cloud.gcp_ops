@@ -19,6 +19,23 @@
         msg: The name to assign to the GCP instance must be defined as import_image_and_run_gcp_instance_instance_name
       when: import_image_and_run_gcp_instance_instance_name is undefined
 
+    - name: Fail when 'import_image_and_run_gcp_instance_import_image_name' is undefined
+      ansible.builtin.fail:
+        msg: The name of the GCP custom image must be defined as import_image_and_run_gcp_instance_import_image_name
+      when: import_image_and_run_gcp_instance_import_image_name is undefined
+
+    - name: Check if an instance with the specified name alrerady exists
+      google.cloud.gcp_compute_instance_info:
+        zone: "{{ import_image_and_run_gcp_instance_zone }}"
+        filters:
+          - name = "{{ import_image_and_run_gcp_instance_instance_name }}"
+      register: import_image_and_run_gcp_instance__gcp_instance_info
+
+    - name: Fail when an instance with the specified name already exists
+      ansible.builtin.fail:
+        msg: "A GCP compute instance with name {{ import_image_and_run_gcp_instance_instance_name }} already exists"
+      when: import_image_and_run_gcp_instance__gcp_instance_info.resources | length == 1
+
     - name: Create temporary directory where to store the archive
       ansible.builtin.tempfile:
         state: directory
@@ -76,18 +93,6 @@
         filters:
           - name = "{{ import_image_and_run_gcp_instance_import_image_name }}"
       register: import_image_and_run_gcp_instance__import_image_info
-
-    - name: Check if an instance with the specified name alrerady exists
-      google.cloud.gcp_compute_instance_info:
-        zone: "{{ import_image_and_run_gcp_instance_zone }}"
-        filters:
-          - name = "{{ import_image_and_run_gcp_instance_instance_name }}"
-      register: import_image_and_run_gcp_instance__gcp_instance_info
-
-    - name: Fail when an instance with the specified name already exists
-      ansible.builtin.fail:
-        msg: "A GCP compute instance with name {{ import_image_and_run_gcp_instance_instance_name }} already exists"
-      when: import_image_and_run_gcp_instance__gcp_instance_info.resources | length == 1
 
     - name: Start GCP compute instance
       google.cloud.gcp_compute_instance:

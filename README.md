@@ -17,6 +17,8 @@ Click on the name of a role to view that content's documentation:
 ### Roles
 Name | Description
 --- | ---
+[cloud.gcp_ops.clone_on_prem_vm](https://github.com/ansible-collections/cloud.gcp_ops/blob/main/roles/clone_on_prem_vm/README.md)|A role to clone an existing on prem VM using the KVM hypervisor.
+[cloud.gcp_ops.import_image_and_run_gcp_instance](https://github.com/ansible-collections/cloud.gcp_ops/blob/main/roles/import_image_and_run_gcp_instance/README.md)|A role that imports a local .raw image into an GCP custom image and run an GCP instance.
 [cloud.gcp_ops.manage_machine_image](https://github.com/redhat-cop/cloud.gcp_ops/blob/main/roles/manage_machine_image/README.md)|A role to create / delete a GCP custom machine image.
 
 ### Playbooks
@@ -24,6 +26,7 @@ Name | Description
 --- | ---
 [cloud.gcp_ops.upload_file_to_cloud_storage](https://github.com/redhat-cop/cloud.gcp_ops/blob/main/playbooks/upload_file_to_cloud_storage/README.md)|A playbook to upload a local file to GCP Cloud Storage.
 <!--end collection content-->
+[cloud.gcp_ops.move_vm_from_on_prem_to_gcp](https://github.com/ansible-collections/cloud.gcp_ops/blob/main/playbooks/move_vm_from_on_prem_to_gcp/README.md)|A playbook to migrate an existing on prem VM running on KVM hypervisor to GCP.
 
 ## Installation and Usage
 

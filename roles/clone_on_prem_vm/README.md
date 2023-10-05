@@ -13,7 +13,7 @@ Role Variables
 
 * **clone_on_prem_vm_source_vm_name** (str): (Required) The name of the on-prem VM you want to clone.
 * **clone_on_prem_vm_image_name** (str): (Optional) The name you want to call the cloned image. If not set, the **clone_on_prem_vm_source_vm_name** will be used with a _-clone_ suffix.
-* **clone_on_prem_vm_overwrite** (bool): (Optional) Weather to overwrite or not an already existing on prem VM clone. Default: true.
+* **clone_on_prem_vm_overwrite** (bool): (Optional) Whether to overwrite or not an already existing on prem VM clone. Default: true.
 * **clone_on_prem_vm_local_image_path** (sr): (Optional) The path where you would like to save the image. If the path does not exists on localhost, the role will create it. If this parameter is not set, the role will save the image in a _~/tmp_ folder.
 * **clone_on_prem_vm_uri** (str): (Optional) Libvirt connection uri. Default: "qemu:///system".
 
@@ -53,7 +53,7 @@ Example Playbook
             name: cloud.gcp_ops.clone_on_prem_vm
           vars:
             clone_on_prem_vm_source_vm_name: "{{ on_prem_source_vm_name }}"
-            clone_on_prem_vm_dest_image_name: "{{ on_prem_vm_image_name }}"
+            clone_on_prem_vm_image_name: "{{ on_prem_vm_image_name }}"
             clone_on_prem_vm_local_image_path: "{{ local_image_path }}"
           delegate_to: kvm
 

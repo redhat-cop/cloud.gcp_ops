@@ -35,7 +35,7 @@ Dependencies
 
 Example Playbook
 ----------------
-This role can be used together with the [cloud.gcp_ops.clone_on_prem_vm](../clone_on_prem_vm/README.md) role as shown below. If you wish to use it separately, just ensure you set the **clone_on_prem_vm_local_image_path** parameter.
+This role can be used together with the [cloud.gcp_ops.clone_on_prem_vm](../clone_on_prem_vm/README.md) role as shown below.
 
     - hosts: localhost
       gather_facts: false
@@ -76,7 +76,7 @@ This role can be used together with the [cloud.gcp_ops.clone_on_prem_vm](../clon
             name: cloud.gcp_ops.clone_on_prem_vm
           vars:
             clone_on_prem_vm_source_vm_name: "{{ on_prem_source_vm_name }}"
-            clone_on_prem_vm_dest_image_name: "{{ on_prem_vm_image_name }}"
+            clone_on_prem_vm_image_name: "{{ on_prem_vm_image_name }}"
             clone_on_prem_vm_local_image_path: "{{ local_image_path }}"
           delegate_to: kvm
 

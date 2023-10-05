@@ -19,7 +19,7 @@
         name: cloud.gcp_ops.clone_on_prem_vm
       vars:
         clone_on_prem_vm_source_vm_name: "{{ clone_on_prem_vm_source_vm_name }}"
-        clone_on_prem_vm_dest_image_name: "{{ clone_on_prem_vm_dest_image_name }}"
+        clone_on_prem_vm_image_name: "{{ clone_on_prem_vm_image_name }}"
         clone_on_prem_vm_local_image_path: "{{ clone_on_prem_vm_local_image_path }}"
         clone_on_prem_vm_overwrite: "{{ clone_on_prem_vm_overwrite }}"
       delegate_to: kvm

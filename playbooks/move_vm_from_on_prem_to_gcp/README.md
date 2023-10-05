@@ -1,4 +1,4 @@
-# cloud.gcp_ops.move_on_prem_vm_to_gcp
+# cloud.gcp_ops.move_vm_from_on_prem_to_gcp
 
 A playbook to migrate an existing on prem VM running on KVM hypervisor to GCP.
 
@@ -28,7 +28,7 @@ GCP credentials with permissions:
 
 * **clone_on_prem_vm_source_vm_name** (str): (Required) The name of the on-prem VM you want to clone.
 * **clone_on_prem_vm_image_name** (str): (Optional) The name you want to call the cloned image. If not set, the **clone_on_prem_vm_source_vm_name** will be used with a _-clone_ suffix.
-* **clone_on_prem_vm_overwrite** (bool): (Optional) Weather to overwrite or not an already existing on prem VM clone. Default: true.
+* **clone_on_prem_vm_overwrite** (bool): (Optional) Whether to overwrite or not an already existing on prem VM clone. Default: true.
 * **clone_on_prem_vm_local_image_path** (str): (Optional) The path where you would like to save the image. If the path does not exists on localhost, the role will create it. If this parameter is not set, the role will save the image in a _~/tmp_ folder.
 * **clone_on_prem_vm_uri** (str): (Optional) Libvirt connection uri. Default: "qemu:///system".
 
