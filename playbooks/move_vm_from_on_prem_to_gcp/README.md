@@ -18,7 +18,7 @@ For a full list of accepted variables see: [clone_on_prem_vm](../clone_on_prem_v
 
 You can define GCP credentials as ENV variables, inside the playbook  or create a ``credentials.yml`` file.
 
-All the variables defined in section ``Playbook Variables`` can be defined inside the ``vars/main.yml`` file.
+All the variables defined in section ``Playbook Variables`` can be defined inside the ``vars.yml`` file.
 
 Create an `inventory.yml` file with information about the host running the KVM hypervisor.
 
@@ -36,7 +36,7 @@ all:
 Run the playbook:
 
 ```shell
-ansible-playbook cloud.gcp_ops.move_vm_from_on_prem_to_gcp -e "@credentials.yaml" -i inventory.yml
+ansible-playbook cloud.gcp_ops.move_vm_from_on_prem_to_gcp -e "@credentials.yaml" -e "@vars.yaml" -i inventory.yml
 ```
 
 ## License
