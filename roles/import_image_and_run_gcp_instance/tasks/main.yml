@@ -24,7 +24,7 @@
         msg: The name of the GCP custom image must be defined as import_image_and_run_gcp_instance_import_image_name
       when: import_image_and_run_gcp_instance_import_image_name is undefined
 
-    - name: Check if an instance with the specified name alrerady exists
+    - name: Check if an instance with the specified name already exists
       google.cloud.gcp_compute_instance_info:
         zone: "{{ import_image_and_run_gcp_instance_zone }}"
         filters:

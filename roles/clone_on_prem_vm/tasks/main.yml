@@ -1,4 +1,9 @@
 ---
+- name: Fail when 'clone_on_prem_vm_source_vm_name' is undefined
+  ansible.builtin.fail:
+    msg: The name of the VM you want to clone must be defined as clone_on_prem_vm_source_vm_name
+  when: clone_on_prem_vm_source_vm_name is undefined
+
 - name: Gather package facts
   ansible.builtin.package_facts:
     manager: auto
@@ -39,7 +44,7 @@
     msg: "The VM {{ clone_on_prem_vm_source_vm_name }} has been destroyed."
   when: clone_on_prem_vm__vm_info[clone_on_prem_vm_source_vm_name].state == "destroyed"
 
-- name: Set 'clone_on_prem_vm_image_name' varible
+- name: Set 'clone_on_prem_vm_image_name' variable
   ansible.builtin.set_fact:
     clone_on_prem_vm_image_name: "{{ clone_on_prem_vm_source_vm_name }}-clone"
   when: clone_on_prem_vm_image_name is undefined
@@ -89,7 +94,7 @@
 
 # Privilege escalation is needed because the .qcow2 file is owned by root
 # when default hypervisor is used
-- name: Convert qcow2 to raw using qemu-img with priviledge escalation
+- name: Convert qcow2 to raw using qemu-img with privilege escalation
   ansible.builtin.command: |
           qemu-img convert -f qcow2 -O raw \
                           {{ clone_on_prem_vm__clone_path }} \
@@ -109,7 +114,7 @@
     LIBVIRT_DEFAULT_URI: "{{ clone_on_prem_vm_uri }}"
   when: clone_on_prem_vm__clone_info.stat.exists and clone_on_prem_vm__clone_info.stat.pw_name != "root"
 
-- name: Create temporary directory to localhost when clone_on_prem_vm_local_image_path is not set
+- name: Create temporary directory to localhost when 'clone_on_prem_vm_local_image_path' is undefined
   ansible.builtin.tempfile:
     state: directory
     suffix: .storage
@@ -117,7 +122,7 @@
   when: clone_on_prem_vm_local_image_path is undefined
   delegate_to: localhost
 
-- name: Create directory if it does not exist
+- name: Create directory if not exists
   ansible.builtin.file:
     path: "{{ clone_on_prem_vm_local_image_path }}"
     state: directory

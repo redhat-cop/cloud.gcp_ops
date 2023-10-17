@@ -1,7 +1,7 @@
 import_image_and_run_gcp_instance
 =================================
 
-A role that imports a local .raw image into an GCP custom image and run an GCP instance.
+A role that imports a local .raw image into a GCP custom image and run a GCP instance.
 
 Requirements
 ------------
@@ -26,7 +26,7 @@ Role Variables
 * **import_image_and_run_gcp_instance_service_accounts** (list): (Optional) A list of service accounts, with their specified scopes, authorized for this instance. Only one service account per VM instance is supported.
 * **import_image_and_run_gcp_instance_tags** (list): (Optional) A list of tags to apply to this instance. Tags are used to identify valid sources or targets for network firewalls and are specified by the client during instance creation. The tags can be later modified by the setTags method. Each tag within the list must comply with RFC1035.
 * **import_image_and_run_gcp_instance_network_interfaces** (list): (Required) An array of configurations for this interface. This specifies how this interface is configured to interact with other network services, such as connecting to the internet. At least one network interface is required. For a full list of parameters visit https://docs.ansible.com/ansible/latest/collections/google/cloud/gcp_compute_instance_module.html#parameter-network_interfaces. It must exist in the region the instance is created.
-* **import_image_and_run_gcp_zone** (str): (Optional) A reference to the zone where the compute machine resides. If not set, it defaults to 'us-central1-a'.
+* **import_image_and_run_gcp_instance_gcp_zone** (str): (Optional) A reference to the zone where the compute machine resides. If not set, it defaults to 'us-central1-a'.
 
 Dependencies
 ------------
@@ -37,59 +37,58 @@ Example Playbook
 ----------------
 This role can be used together with the [cloud.gcp_ops.clone_on_prem_vm](../clone_on_prem_vm/README.md) role as shown below.
 
-    - hosts: localhost
-      gather_facts: false
+Create an `inventory.yml` file with information about the host running the KVM hypervisor.
 
+```yaml
+---
+all:
+  hosts:
+    kvm:
+      ansible_host: myhost
+      ansible_user: myuser
+      ansible_ssh_private_key_file: /path/to/private_key
+      groups: mygroup
+```
+
+All the variables defined in section ``Playbook Variables`` can be defined inside the ``vars/main.yml`` file.
+
+Create a ``playbook.ym`` file like this:
+
+```
+---
+- hosts: localhost
+  gather_facts: false
+
+  tasks:
+    - name: Import 'cloud.gcp_ops.clone_on_prem_vm' role
+      ansible.builtin.import_role:
+        name: cloud.gcp_ops.clone_on_prem_vm
       vars:
-        on_prem_source_vm_name: "ubuntu-guest"
-        on_prem_vm_image_name: "ubuntu-guest-image"
-        bucket_name: "vm-s3-bucket"
-        instance_name: "vm-clone"
-        local_image_path: "~/images/"
-        kvm_host:
-          name: kvm
-          ansible_host: 192.168.1.117
-          ansible_user: vagrant
-          groups: "libvirt"
-          ansible_ssh_private_key_file: ~/.ssh/id_rsa.pub
-        machine_type: "t2.micro"
-        import_image_name: "import-clone"
-        network_interfaces:
-          - network: "network-instance-clone-vm"
-            access_configs:
-            - name: External NAT
-              nat_ip:
-                address: "35.188.61.177"
-              type: ONE_TO_ONE_NAT
+        clone_on_prem_vm_source_vm_name: "{{ clone_on_prem_vm_source_vm_name }}"
+        clone_on_prem_vm_image_name: "{{ clone_on_prem_vm_image_name }}"
+        clone_on_prem_vm_local_image_path: "{{ clone_on_prem_vm_local_image_path }}"
+        clone_on_prem_vm_uri: "{{ clone_on_prem_vm_uri }}"
+      delegate_to: kvm
 
-      tasks:
-        - name: Add host to inventory
-          ansible.builtin.add_host:
-            name: "{{ kvm_host.name }}"
-            ansible_host: "{{ kvm_host.ansible_host }}"
-            ansible_user: "{{ kvm_host.ansible_user }}"
-            ansible_ssh_common_args: -o "UserKnownHostsFile=/dev/null" -o StrictHostKeyChecking=no -i {{ kvm_host.ansible_ssh_private_key_file }}
-            groups: "{{ kvm_host.groups }}"
+    - name: Import 'cloud.gcp_ops.import_image_and_run_gcp_instance' role
+      ansible.builtin.import_role:
+        name: cloud.gcp_ops.import_image_and_run_gcp_instance
+      vars:
+        import_image_and_run_gcp_instance_bucket_name: "{{ import_image_and_run_gcp_instance_bucket_name }}"
+        import_image_and_run_gcp_instance_image_path: "{{ import_image_and_run_gcp_instance_image_path }}"
+        import_image_and_run_gcp_instance_instance_name: "{{ import_image_and_run_gcp_instance_instance_name }}"
+        import_image_and_run_gcp_instance_machine_type: "{{ import_image_and_run_gcp_instance_machine_type }}"
+        import_image_and_run_gcp_instance_import_image_name: "{{ import_image_and_run_gcp_instance_import_image_name }}"
+        import_image_and_run_gcp_instance_network_interfaces: "{{ import_image_and_run_gcp_instance_network_interfaces }}"
+        import_image_and_run_gcp_instance_zone: "{{ import_image_and_run_gcp_instance_zone }}"
+```
 
-        - name: Import 'cloud.gcp_ops.clone_on_prem_vm' role
-          ansible.builtin.import_role:
-            name: cloud.gcp_ops.clone_on_prem_vm
-          vars:
-            clone_on_prem_vm_source_vm_name: "{{ on_prem_source_vm_name }}"
-            clone_on_prem_vm_image_name: "{{ on_prem_vm_image_name }}"
-            clone_on_prem_vm_local_image_path: "{{ local_image_path }}"
-          delegate_to: kvm
+Run the playbook:
 
-        - name: Import 'cloud.gcp_ops.import_image_and_run_gcp_instance' role
-          ansible.builtin.import_role:
-            name: cloud.gcp_ops.import_image_and_run_gcp_instance
-          vars:
-            import_image_and_run_gcp_instance_bucket_name: "{{ bucket_name }}"
-            import_image_and_run_gcp_instance_image_path: "{{ clone_on_prem_vm_local_image_path }}"
-            import_image_and_run_gcp_instance_instance_name: "{{ instance_name }}"
-            import_image_and_run_gcp_instance_machine_type: "{{ machine_type }}"
-            import_image_and_run_gcp_instance_import_image_name: "{{ import_image_name }}"
-            import_image_and_run_gcp_instance_network_interfaces: "{{ network_interfaces }}"
+```shell
+ansible-playbook playbook.yml -i inventory.yml
+```
+
 
 License
 -------
