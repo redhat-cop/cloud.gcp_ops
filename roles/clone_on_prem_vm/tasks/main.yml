@@ -143,4 +143,4 @@
 
 - name: Set 'clone_on_prem_vm_local_image_path'
   ansible.builtin.set_fact:
-    clone_on_prem_vm_local_image_path: "{{ clone_on_prem_vm_fetch_to_localhost.dest }}"
+    clone_on_prem_vm_raw_image_path: "{{ clone_on_prem_vm_fetch_to_localhost.dest }}"
