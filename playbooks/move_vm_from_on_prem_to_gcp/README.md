@@ -36,7 +36,7 @@ all:
 Run the playbook:
 
 ```shell
-ansible-playbook cloud.gcp_ops.move_vm_from_on_prem_to_gcp -e "@credentials.yaml" -e "@vars.yaml" -i inventory.yml
+ansible-playbook cloud.gcp_ops.move_vm_from_on_prem_to_gcp.move_vm_from_on_prem_to_gcp -e "@credentials.yaml" -e "@vars.yaml" -i inventory.yml
 ```
 
 ## License
