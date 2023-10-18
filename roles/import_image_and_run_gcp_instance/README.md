@@ -75,7 +75,7 @@ Create a ``playbook.ym`` file like this:
         name: cloud.gcp_ops.import_image_and_run_gcp_instance
       vars:
         import_image_and_run_gcp_instance_bucket_name: "{{ import_image_and_run_gcp_instance_bucket_name }}"
-        import_image_and_run_gcp_instance_image_path: "{{ import_image_and_run_gcp_instance_image_path }}"
+        import_image_and_run_gcp_instance_image_path: "{{ clone_on_prem_vm_raw_image_path }}"
         import_image_and_run_gcp_instance_instance_name: "{{ import_image_and_run_gcp_instance_instance_name }}"
         import_image_and_run_gcp_instance_machine_type: "{{ import_image_and_run_gcp_instance_machine_type }}"
         import_image_and_run_gcp_instance_import_image_name: "{{ import_image_and_run_gcp_instance_import_image_name }}"
