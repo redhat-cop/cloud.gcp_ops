@@ -8,7 +8,7 @@ This playbook uses the ``cloud.gcp_ops.clone_on_prem_vm`` role to clone an exist
 
 ## Playbook Variables
 
-For a full list of accepted variables see: [clone_on_prem_vm](../clone_on_prem_vm/README.md#Role-Variables) and respectively [import_image_and_run_gco_instance](../roles/import_image_and_run_gcp_instance/REAME.md#Role-Variables).
+For a full list of accepted variables see: [clone_on_prem_vm](../clone_on_prem_vm/README.md#Role-Variables) and respectively [import_image_and_run_gcp_instance](../roles/import_image_and_run_gcp_instance/REAME.md#Role-Variables).
 
 ## Dependencies
 

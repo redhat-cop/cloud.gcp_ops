@@ -21,12 +21,12 @@ Role Variables
 * **import_image_and_run_gcp_instance_deletion_protection** (bool): (Optional) Whether the resource should be protected against deletion.
 * **import_image_and_run_gcp_instance_labels** (dict): (Optional) Labels to apply to this instance. A list of key->value pairs.
 * **import_image_and_run_gcp_instance_metadata** (dict): (Optional) The metadata key/value pairs to assign to instances that are created from this template. These pairs can consist of custom metadata or predefined keys.
-* **import_image_and_run_gcp_instance_machine_type** (str): (Optional) A reference to a machine type which defines VM kind.
+* **import_image_and_run_gcp_instance_machine_type** (str): (Optional) A reference to a machine type which defines VM kind. If not set, it defaults to 'n1-standard-1'.
 * **import_image_and_run_gcp_instance_scheduling** (dict): (Optional) Sets the scheduling options for this instance.
 * **import_image_and_run_gcp_instance_service_accounts** (list): (Optional) A list of service accounts, with their specified scopes, authorized for this instance. Only one service account per VM instance is supported.
 * **import_image_and_run_gcp_instance_tags** (list): (Optional) A list of tags to apply to this instance. Tags are used to identify valid sources or targets for network firewalls and are specified by the client during instance creation. The tags can be later modified by the setTags method. Each tag within the list must comply with RFC1035.
 * **import_image_and_run_gcp_instance_network_interfaces** (list): (Required) An array of configurations for this interface. This specifies how this interface is configured to interact with other network services, such as connecting to the internet. At least one network interface is required. For a full list of parameters visit https://docs.ansible.com/ansible/latest/collections/google/cloud/gcp_compute_instance_module.html#parameter-network_interfaces. It must exist in the region the instance is created.
-* **import_image_and_run_gcp_instance_gcp_zone** (str): (Optional) A reference to the zone where the compute machine resides. If not set, it defaults to 'us-central1-a'.
+* **import_image_and_run_gcp_instance_zone** (str): (Optional) A reference to the zone where the compute machine resides. If not set, it defaults to 'us-central1-a'.
 
 Dependencies
 ------------
@@ -50,7 +50,7 @@ all:
       groups: mygroup
 ```
 
-All the variables defined in section ``Playbook Variables`` can be defined inside the ``vars.yml`` file.
+All the variables defined in section [Role Variables](#role-variables) can be defined inside the ``vars.yml`` file.
 
 Create a ``playbook.yml`` file like this:
 

@@ -38,7 +38,7 @@ all:
       groups: mygroup
 ```
 
-All the variables defined in section ``Playbook Variables`` can be defined inside the ``vars.yml`` file.
+All the variables defined in section [Role Variables](#role-variables) can be defined inside the ``vars.yml`` file.
 
 Create a ``playbook.yml`` file like this:
 
