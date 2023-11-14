@@ -1,0 +1,5 @@
+---
+breaking_changes:
+  - Remove support for ansible-core < 2.14 (https://github.com/redhat-cop/cloud.gcp_ops/pull/9).
+trivial:
+  - Update CI workflows and linter versions (https://github.com/redhat-cop/cloud.gcp_ops/pull/9).
