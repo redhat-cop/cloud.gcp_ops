@@ -12,4 +12,4 @@
         var: vars
 
 - name: Import playbook 'cloud.gcp_ops.upload_file_to_cloud_storage'
-  ansible.builtin.import_playbook: cloud.gcp_ops.upload_file_to_cloud_storage
+  ansible.builtin.import_playbook: cloud.gcp_ops.upload_file_to_cloud_storage.upload_file_to_cloud_storage

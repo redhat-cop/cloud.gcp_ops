@@ -1,4 +1,4 @@
-# cloud.gcp_ops.upload_file
+# cloud.gcp_ops.upload_file_to_cloud_storage
 
 A playbook to upload a file from a remote host to GCP Cloud Storage.
 
@@ -8,9 +8,9 @@ GCP user account with at minimum the storage.objectCreator IAM role or equivalen
 
 ## Playbook Variables
 
-* **upload_file_to_cloud_storage_bucket**: The name of the GCP storage bucket to upload the file to. **Required**
+* **upload_file_to_cloud_storage_bucket_name**: The name of the GCP storage bucket to upload the file to. **Required**
 * **upload_file_to_cloud_storage_file_path**: Path to file to upload. **Required**
-* **upload_file_to_cloud_storage_host**: Name of the remote host or group with file to upload. Default: `"all"`.
+* **upload_file_to_cloud_storage_host_name**: Name of the remote host or group with file to upload. Default: `"all"`.
 * **upload_file_to_cloud_storage_object_name**: The name to give the object in cloud storage. If not provided, defaults to the base file name (without path) of `upload_file_to_cloud_storage_file_path`.
 
 ## Dependencies
@@ -25,7 +25,7 @@ With GCP credentials set as ENV variables or included in vars, create vars and i
 
 ```yaml
 ---
-upload_file_to_cloud_storage_bucket: my-bucket
+upload_file_to_cloud_storage_bucket_name: my-bucket
 upload_file_to_cloud_storage_file_path: /path/to/file/on/remote/host
 ```
 

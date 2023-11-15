@@ -1,6 +1,6 @@
 ---
 - name: Upload a file to GCP Cloud Storage
-  hosts: "{{ upload_file_to_cloud_storage_host | default('all') }}"
+  hosts: "{{ upload_file_to_cloud_storage_host_name | default('all') }}"
   gather_facts: false
   module_defaults:
     group/gcp:
@@ -11,9 +11,10 @@
   tasks:
     - name: Fail when required variables are not defined
       ansible.builtin.fail:
+        msg: "The following variables are required: upload_file_to_cloud_storage_bucket_name and upload_file_to_cloud_storage_file_path"
       when: item is undefined
       loop:
-        - "{{ upload_file_to_cloud_storage_bucket }}"
+        - "{{ upload_file_to_cloud_storage_bucket_name }}"
         - "{{ upload_file_to_cloud_storage_file_path }}"
 
     - name: Get file info
@@ -45,7 +46,7 @@
             action: upload
             src: "{{ _tempfile.path }}"
             dest: "{{ upload_file_to_cloud_storage_object_name | default(upload_file_to_cloud_storage_file_path | basename) }}"
-            bucket: "{{ upload_file_to_cloud_storage_bucket }}"
+            bucket: "{{ upload_file_to_cloud_storage_bucket_name }}"
 
       always:
         - name: Delete temporary directory
