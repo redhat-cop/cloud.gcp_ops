@@ -4,11 +4,11 @@ A playbook to migrate an existing on prem VM running on KVM hypervisor to GCP.
 
 ## Requirements
 
-This playbook uses the ``cloud.gcp_ops.clone_on_prem_vm`` role to clone an existing VM on prem using the KVM hypervisor and the ``cloud.gcp_ops.import_image_and_run_gcp_instance`` role to import a local .raw image into a GCP custom machine image and run a GCP instance. For a complete list of requirements, see [clone_on_prem_vm](../clone_on_prem_vm/README.md#Requirements) and [import_image_and_run_gcp_instance](../roles/import_image_and_run_gcp_instance/REAME.md#Requirements), respectively.
+This playbook uses the ``cloud.gcp_ops.clone_on_prem_vm`` role to clone an existing VM on prem using the KVM hypervisor and the ``cloud.gcp_ops.import_image_and_run_gcp_instance`` role to import a local .raw image into a GCP custom machine image and run a GCP instance. For a complete list of requirements, see [clone_on_prem_vm](../clone_on_prem_vm/README.md#Requirements) and [import_image_and_run_gcp_instance](../roles/import_image_and_run_gcp_instance/README.md#Requirements), respectively.
 
 ## Playbook Variables
 
-For a full list of accepted variables see: [clone_on_prem_vm](../clone_on_prem_vm/README.md#Role-Variables) and respectively [import_image_and_run_gcp_instance](../roles/import_image_and_run_gcp_instance/REAME.md#Role-Variables).
+For a full list of accepted variables see: [clone_on_prem_vm](../clone_on_prem_vm/README.md#Role-Variables) and respectively [import_image_and_run_gcp_instance](../roles/import_image_and_run_gcp_instance/README.md#Role-Variables).
 
 ## Dependencies
 
