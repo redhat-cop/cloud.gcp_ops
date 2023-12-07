@@ -30,14 +30,20 @@ Name | Description
 
 The [google.cloud](https://github.com/ansible-collections/google.cloud) collection MUST be installed in order for this collection to work.
 
-
 ### Installation
+
 Clone the collection repository.
 
 ```shell
   mkdir -p ~/.ansible/collections/ansible_collections/cloud/gcp_ops
   cd ~/.ansible/collections/ansible_collections/cloud/gcp_ops
   git clone https://github.com/redhat-cop/cloud.gcp_ops .
+```
+
+Install the python requirements.
+
+```shell
+  pip install -r requirements.txt
 ```
 
 ### Using this collection
@@ -85,6 +91,20 @@ Sanity and unit tests are run as normal:
 ```shell
   ansible-test sanity
 ```
+
+Integration tests require real GCP credentials that must be provided to ansible-test. To run integration tests locally using service account credentials:
+
+1. [Create a service account key](https://support.google.com/cloud/answer/6158849?hl=en&ref_topic=6262490#serviceaccounts&zippy=%2Cservice-accounts) in the GCP console and save the json cred file.
+2. Create the file `tests/integration/cloud-config-gcp.ini` containing the following:
+
+   ```ini
+    [default]
+    gcp_project: <project ID>
+    gcp_cred_file: </path/to/cred/file.json>
+    gcp_cred_kind: serviceaccount
+   ```
+
+3. Run `ansible-test integration`
 
 This collection is tested using GitHub Actions. To know more about CI, refer to [CI.md](https://github.com/https://github.com/redhat-cop/cloud.gcp_ops/blob/main/CI.md).
 
