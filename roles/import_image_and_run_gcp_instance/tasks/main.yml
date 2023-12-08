@@ -61,6 +61,7 @@
       ansible.builtin.copy:
         src: "{{ import_image_and_run_gcp_instance_image_path }}"
         dest: "{{ import_image_and_run_gcp_instance__dir.path }}/disk.raw"
+        mode: "0644"
 
     - name: Set 'import_image_and_run_aws_instance__s3_object_key' variable
       ansible.builtin.set_fact:
@@ -68,10 +69,10 @@
         import_image_and_run_gcp_instance__object_key: "{{ import_image_and_run_gcp_instance_bucket_name }}/disk.tar.gz"
 
     - name: Gather facts on host
-      setup:
+      ansible.builtin.setup:
 
     - name: Create a tar.gz archive of a the .raw image
-      shell: "{{ 'gtar' if 'Darwin' in ansible_facts['system'] else 'tar' }} --format=oldgnu -Sczf disk.tar.gz disk.raw"
+      ansible.builtin.command: "{{ 'gtar' if 'Darwin' in ansible_facts['system'] else 'tar' }} --format=oldgnu -Sczf disk.tar.gz disk.raw"
       args:
         chdir: "{{ import_image_and_run_gcp_instance__dir.path }}"
 

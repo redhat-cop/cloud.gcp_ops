@@ -7,27 +7,27 @@
       ansible.builtin.import_role:
         name: cloud.gcp_ops.clone_on_prem_vm
       vars:
-        clone_on_prem_vm_source_vm_name: "{{ clone_on_prem_vm_source_vm_name }}"
-        clone_on_prem_vm_image_name: "{{ clone_on_prem_vm_image_name }}"
-        clone_on_prem_vm_local_image_path: "{{ clone_on_prem_vm_local_image_path }}"
-        clone_on_prem_vm_overwrite: "{{ clone_on_prem_vm_overwrite }}"
-        clone_on_prem_vm_uri: "{{ clone_on_prem_vm_uri }}"
+        clone_on_prem_vm_source_vm_name: "{{ source_vm_name }}"
+        clone_on_prem_vm_image_name: "{{ image_name }}"
+        clone_on_prem_vm_local_image_path: "{{ local_image_path }}"
+        clone_on_prem_vm_overwrite: "{{ overwrite }}"
+        clone_on_prem_vm_uri: "{{ uri }}"
       delegate_to: kvm
 
     - name: Import 'cloud.gcp_ops.import_image_and_run_gcp_instance' role
       ansible.builtin.import_role:
         name: cloud.gcp_ops.import_image_and_run_gcp_instance
       vars:
-        import_image_and_run_gcp_instance_bucket_name: "{{ import_image_and_run_gcp_instance_bucket_name }}"
-        import_image_and_run_gcp_instance_image_path: "{{ clone_on_prem_vm_raw_image_path }}"
-        import_image_and_run_gcp_instance_instance_name: "{{ import_image_and_run_gcp_instance_instance_name }}"
-        import_image_and_run_gcp_instance_machine_type: "{{ import_image_and_run_gcp_instance_machine_type }}"
-        import_image_and_run_gcp_instance_import_image_name: "{{ import_image_and_run_gcp_instance_import_image_name }}"
-        import_image_and_run_gcp_instance_deletion_protection: "{{ import_image_and_run_gcp_instance_deletion_protection }}"
-        import_image_and_run_gcp_instance_labels: "{{ import_image_and_run_gcp_instance_labels }}"
-        import_image_and_run_gcp_instance_metadata: "{{ import_image_and_run_gcp_instance_metadata }}"
-        import_image_and_run_gcp_instance_network_interfaces: "{{ import_image_and_run_gcp_instance_network_interfaces }}"
-        import_image_and_run_gcp_instance_scheduling: "{{ import_image_and_run_gcp_instance_scheduling }}"
-        import_image_and_run_gcp_instance_service_accounts: "{{ import_image_and_run_gcp_instance_service_accounts }}"
-        import_image_and_run_gcp_instance_tags: "{{ import_image_and_run_gcp_instance_tags }}"
-        import_image_and_run_gcp_instance_zone: "{{ import_image_and_run_gcp_instance_zone }}"
+        import_image_and_run_gcp_instance_bucket_name: "{{ bucket_name }}"
+        import_image_and_run_gcp_instance_image_path: "{{ raw_image_path }}"
+        import_image_and_run_gcp_instance_instance_name: "{{ instance_name }}"
+        import_image_and_run_gcp_instance_machine_type: "{{ machine_type }}"
+        import_image_and_run_gcp_instance_import_image_name: "{{ import_image_name }}"
+        import_image_and_run_gcp_instance_deletion_protection: "{{ instance_deletion_protection }}"
+        import_image_and_run_gcp_instance_labels: "{{ instance_labels }}"
+        import_image_and_run_gcp_instance_metadata: "{{ instance_metadata }}"
+        import_image_and_run_gcp_instance_network_interfaces: "{{ instance_network_interfaces }}"
+        import_image_and_run_gcp_instance_scheduling: "{{ instance_scheduling }}"
+        import_image_and_run_gcp_instance_service_accounts: "{{ instance_service_accounts }}"
+        import_image_and_run_gcp_instance_tags: "{{ instance_tags }}"
+        import_image_and_run_gcp_instance_zone: "{{ instance_zone }}"
