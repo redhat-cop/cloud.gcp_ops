@@ -1,0 +1,42 @@
+---
+- name: Create GCP Storage bucket
+  google.cloud.gcp_storage_bucket:
+    name: "{{ item }}"
+    auth_kind: "{{ gcp_auth_kind }}"
+    service_account_file: "{{ gcp_cred_file }}"
+    project: "{{ gcp_project }}"
+  with_items:
+    - "{{ test_source_storage_bucket }}"
+    - "{{ test_dest_storage_bucket }}"
+
+- name: Create temporary directory to store data
+  ansible.builtin.tempfile:
+    state: directory
+    suffix: .upload
+  register: _tmpdir
+
+- name: Upload objects into source bucket
+  block:
+    - name: Copy content into files
+      ansible.builtin.copy:
+        dest: "{{ _tmpdir.path }}/{{ item.name }}.txt"
+        content: "{{ item.value }}"
+        mode: '0755'
+      with_items: "{{ test_bucket_objects }}"
+
+    - name: Upload object into source bucket
+      google.cloud.gcp_storage_object:
+        action: upload
+        bucket: "{{ test_source_storage_bucket }}"
+        src: "{{ _tmpdir.path }}/{{ item.name }}.txt"
+        dest: "{{ item.name }}"
+        auth_kind: "{{ gcp_auth_kind }}"
+        service_account_file: "{{ gcp_cred_file }}"
+        project: "{{ gcp_project }}"
+      with_items: "{{ test_bucket_objects }}"
+
+  always:
+    - name: Delete temporary directory
+      ansible.builtin.file:
+        state: absent
+        path: "{{ _tmpdir.path }}"

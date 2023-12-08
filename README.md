@@ -17,11 +17,12 @@ Click on the name of a role to view that content's documentation:
 ### Roles
 Name | Description
 --- | ---
+[cloud.gcp_ops.move_objects_between_storage_buckets](https://github.com/redhat-cop/cloud.gcp_ops/blob/main/roles/move_objects_between_storage_buckets/README.md)|A role to move objects between GCP Storage buckets.
 
 ### Playbooks
 Name | Description
 --- | ---
-<!--end collection content-->
+cloud.gcp_ops.move_objects_between_storage_buckets](https://github.com/redhat-cop/cloud.gcp_ops/blob/main/playbooks/MOVE_OBJECTS_FROM_STORAGE_BUCKETS.md)|A playbook to move objects between GCP Storage buckets.
 
 ## Installation and Usage
 

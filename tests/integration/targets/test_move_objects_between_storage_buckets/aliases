@@ -1,0 +1,3 @@
+cloud/gcp
+role/move_objects_between_storage_buckets
+time=10s

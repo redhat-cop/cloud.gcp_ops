@@ -1,0 +1,27 @@
+---
+- name: Fail when 'move_objects_between_storage_buckets_source_bucket' is undefined
+  ansible.builtin.fail:
+    msg: GCP storage bucket source should be defined as move_objects_between_storage_buckets_source_bucket
+  when: move_objects_between_storage_buckets_source_bucket is undefined
+
+- name: Fail when 'move_objects_between_storage_buckets_dest_bucket' is undefined
+  ansible.builtin.fail:
+    msg: GCP storage bucket destination should be defined as move_objects_between_storage_buckets_dest_bucket
+  when: move_objects_between_storage_buckets_dest_bucket is undefined
+
+- name: Fail when 'move_objects_between_storage_buckets_objects' is undefined
+  ansible.builtin.fail:
+    msg: Objects to move should be defined as move_objects_between_storage_buckets_objects
+  when: move_objects_between_storage_buckets_objects is undefined
+
+- name: Create temporary directory to download objects in
+  ansible.builtin.tempfile:
+    state: directory
+    suffix: .storage
+  register: move_objects_between_storage_buckets__tmpdir
+  notify:
+    - 'Delete temporary directory'
+
+- name: Include tasks 'move_object.yml'
+  ansible.builtin.include_tasks: move_object.yml
+  with_items: "{{ move_objects_between_storage_buckets_objects }}"

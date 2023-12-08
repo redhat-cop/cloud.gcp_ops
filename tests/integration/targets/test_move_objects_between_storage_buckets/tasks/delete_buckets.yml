@@ -1,0 +1,35 @@
+---
+- name: Delete objects from source buckets
+  google.cloud.gcp_storage_object:
+    action: delete
+    bucket: "{{ test_source_storage_bucket }}"
+    src: "{{ item.name }}"
+    auth_kind: "{{ gcp_auth_kind }}"
+    service_account_file: "{{ gcp_cred_file }}"
+    project: "{{ gcp_project }}"
+  with_items: "{{ test_bucket_objects }}"
+  register: delete_result
+  failed_when: (delete_result is failed) and (delete_result.msg != "File does not exist in bucket")
+
+- name: Delete objects from destination buckets
+  google.cloud.gcp_storage_object:
+    action: delete
+    bucket: "{{ test_dest_storage_bucket }}"
+    src: "{{ item.name }}"
+    auth_kind: "{{ gcp_auth_kind }}"
+    service_account_file: "{{ gcp_cred_file }}"
+    project: "{{ gcp_project }}"
+  with_items: "{{ test_bucket_objects }}"
+  register: delete_result
+  failed_when: (delete_result is failed) and (delete_result.msg != "File does not exist in bucket")
+
+- name: Delete GCP Storage bucket
+  google.cloud.gcp_storage_bucket:
+    name: "{{ item }}"
+    auth_kind: "{{ gcp_auth_kind }}"
+    service_account_file: "{{ gcp_cred_file }}"
+    project: "{{ gcp_project }}"
+    state: absent
+  with_items:
+    - "{{ test_source_storage_bucket }}"
+    - "{{ test_dest_storage_bucket }}"
