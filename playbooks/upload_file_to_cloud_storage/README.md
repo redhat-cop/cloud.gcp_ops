@@ -13,10 +13,6 @@ GCP user account with at minimum the storage.objectCreator IAM role or equivalen
 * **upload_file_to_cloud_storage_host_name**: Name of the remote host or group with file to upload. Default: `"all"`.
 * **upload_file_to_cloud_storage_object_name**: The name to give the object in cloud storage. If not provided, defaults to the base file name (without path) of `upload_file_to_cloud_storage_file_path`.
 
-## Dependencies
-
-* Role: [gcp_setup_credentials](https://github.com/redhat-cop/cloud.gcp_ops/blob/main/roles/gcp_setup_credentials/README.md)
-
 ## Example Usage
 
 With GCP credentials set as ENV variables or included in vars, create vars and inventory files.

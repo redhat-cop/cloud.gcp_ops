@@ -40,12 +40,6 @@ Clone the collection repository.
   git clone https://github.com/redhat-cop/cloud.gcp_ops .
 ```
 
-Install the python requirements.
-
-```shell
-  pip install -r requirements.txt
-```
-
 ### Using this collection
 
 Once installed, you can reference the cloud.gcp_ops collection content by its fully qualified collection name (FQCN), for example:
@@ -92,7 +86,9 @@ Sanity and unit tests are run as normal:
   ansible-test sanity
 ```
 
-Integration tests require real GCP credentials that must be provided to ansible-test. To run integration tests locally using service account credentials:
+#### Integration Tests
+
+Integration tests require GCP credentials that must be provided to ansible-test. To authenticate using service account credentials:
 
 1. [Create a service account key](https://support.google.com/cloud/answer/6158849?hl=en&ref_topic=6262490#serviceaccounts&zippy=%2Cservice-accounts) in the GCP console and save the json cred file.
 2. Create the file `tests/integration/cloud-config-gcp.ini` containing the following:
@@ -104,7 +100,23 @@ Integration tests require real GCP credentials that must be provided to ansible-
     gcp_cred_kind: serviceaccount
    ```
 
-3. Run `ansible-test integration`
+To authenticate with [application default credentials](https://cloud.google.com/docs/authentication/provide-credentials-adc) via the [GCloud CLI](https://cloud.google.com/sdk/docs/install):
+
+1. Once you have installed `gcloud` and performed basic initialization (via `gcloud init`) run:
+
+   ```shell
+    gcloud auth application-default login
+   ```
+
+2. Create the file `tests/integration/cloud-config-gcp.ini` containing the following:
+
+   ```ini
+    [default]
+    gcp_project: <project ID>
+    gcp_cred_kind: application
+   ```
+
+Once credentials are set up, run all integration tests with `ansible-test integratrion` or run a subset of integration tests with `ansible-test integration <target>`
 
 This collection is tested using GitHub Actions. To know more about CI, refer to [CI.md](https://github.com/https://github.com/redhat-cop/cloud.gcp_ops/blob/main/CI.md).
 

@@ -6,7 +6,7 @@
     group/gcp:
       auth_kind: "{{ auth_kind | default(omit) }}"
       project: "{{ project | default(omit) }}"
-      service_account_file: "{{ service_account_file | default(omit) }}"
+      service_account_file: "{{ service_account_file | default(omit, true) }}"
 
   tasks:
     - name: Fail when required variables are not defined
