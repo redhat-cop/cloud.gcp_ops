@@ -31,13 +31,13 @@ Role Variables
 Dependencies
 ------------
 
-- role: [gcp_setup_credentials](../gcp_setup_credentials/README.md)
+- NA
 
 Example Playbook
 ----------------
 This role can be used together with the [cloud.gcp_ops.clone_on_prem_vm](../clone_on_prem_vm/README.md) role as shown below.
 
-Create an `inventory.yml` file with information about the host running the KVM hypervisor.
+Create an ``inventory.yml`` file with information about the host running the KVM hypervisor.
 
 ```yaml
 ---
@@ -51,6 +51,8 @@ all:
 ```
 
 All the variables defined in section [Role Variables](#role-variables) can be defined inside the ``vars.yml`` file.
+
+You can define GCP credentials as ENV variables, inside the playbook or create a ``credentials.yml`` file.
 
 Create a ``playbook.yml`` file like this:
 
@@ -86,9 +88,8 @@ Create a ``playbook.yml`` file like this:
 Run the playbook:
 
 ```shell
-ansible-playbook playbook.yml -i inventory.yml -e "@vars.yml"
+ansible-playbook playbook.yml -i inventory.yml -e "@vars.yml" -e "@credentials.yaml"
 ```
-
 
 License
 -------

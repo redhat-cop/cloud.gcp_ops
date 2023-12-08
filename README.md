@@ -25,8 +25,8 @@ Name | Description
 Name | Description
 --- | ---
 [cloud.gcp_ops.upload_file_to_cloud_storage](https://github.com/redhat-cop/cloud.gcp_ops/blob/main/playbooks/upload_file_to_cloud_storage/README.md)|A playbook to upload a local file to GCP Cloud Storage.
-<!--end collection content-->
 [cloud.gcp_ops.move_vm_from_on_prem_to_gcp](https://github.com/ansible-collections/cloud.gcp_ops/blob/main/playbooks/move_vm_from_on_prem_to_gcp/README.md)|A playbook to migrate an existing on prem VM running on KVM hypervisor to GCP.
+<!--end collection content-->
 
 ## Installation and Usage
 

@@ -12,7 +12,7 @@ For a full list of accepted variables see: [clone_on_prem_vm](../clone_on_prem_v
 
 ## Dependencies
 
-* Role: [gcp_setup_credentials](https://github.com/redhat-cop/cloud.gcp_ops/blob/main/roles/gcp_setup_credentials/README.md)
+* NA
 
 ## Example Usage
 
