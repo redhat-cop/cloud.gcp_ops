@@ -1,0 +1,3 @@
+cloud/gcp
+playbook/upload_file_to_cloud_storage
+time=30s

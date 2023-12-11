@@ -1,0 +1,56 @@
+---
+- name: Upload a file to GCP Cloud Storage
+  hosts: "{{ upload_file_to_cloud_storage_host_name | default('all') }}"
+  gather_facts: false
+  module_defaults:
+    group/gcp:
+      auth_kind: "{{ auth_kind | default(omit) }}"
+      project: "{{ project | default(omit) }}"
+      service_account_file: "{{ service_account_file | default(omit, true) }}"
+
+  tasks:
+    - name: Fail when required variables are not defined
+      ansible.builtin.fail:
+        msg: "The following variables are required: upload_file_to_cloud_storage_bucket_name and upload_file_to_cloud_storage_file_path"
+      when: item is undefined
+      loop:
+        - "{{ upload_file_to_cloud_storage_bucket_name }}"
+        - "{{ upload_file_to_cloud_storage_file_path }}"
+
+    - name: Get file info
+      ansible.builtin.stat:
+        path: "{{ upload_file_to_cloud_storage_file_path }}"
+      register: _stat
+
+    - name: Fail when file does not exist
+      ansible.builtin.fail:
+        msg: 'File {{ upload_file_to_cloud_storage_file_path }} does not exist.'
+      when: not _stat.stat.exists
+
+    - name: Fetch file from remote host and put into S3 bucket
+      block:
+        - name: Create tempfile to download remote file to
+          delegate_to: localhost
+          ansible.builtin.tempfile:
+          register: _tempfile
+
+        - name: Download file from remote host
+          ansible.builtin.fetch:
+            src: "{{ upload_file_to_cloud_storage_file_path }}"
+            dest: "{{ _tempfile.path }}"
+            flat: true
+
+        - name: Upload file to Cloud Storage
+          delegate_to: localhost
+          google.cloud.gcp_storage_object:
+            action: upload
+            src: "{{ _tempfile.path }}"
+            dest: "{{ upload_file_to_cloud_storage_object_name | default(upload_file_to_cloud_storage_file_path | basename) }}"
+            bucket: "{{ upload_file_to_cloud_storage_bucket_name }}"
+
+      always:
+        - name: Delete temporary directory
+          delegate_to: localhost
+          ansible.builtin.file:
+            state: absent
+            path: "{{ _tempfile.path }}"

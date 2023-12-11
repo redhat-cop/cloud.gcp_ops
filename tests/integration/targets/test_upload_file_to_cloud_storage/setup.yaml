@@ -1,0 +1,25 @@
+---
+- name: Initialize resources for tests
+  hosts: localhost
+  gather_facts: false
+
+  vars_files:
+    - vars/main.yaml
+
+  module_defaults:
+    group/gcp:
+      project: "{{ gcp_project }}"
+      auth_kind: "{{ gcp_cred_kind }}"
+      service_account_file: "{{ gcp_cred_file | default(omit) }}"
+
+  tasks:
+    - name: Create playbook vars file
+      ansible.builtin.template:
+        src: upload_file_vars.yaml.j2
+        dest: upload_file_vars.yaml
+        mode: "0755"
+
+    - name: Create GCP storage bucket for test
+      google.cloud.gcp_storage_bucket:
+        name: "{{ test_bucket_name }}"
+        state: present

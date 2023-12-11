@@ -1,0 +1,7 @@
+---
+auth_kind: "{{ gcp_cred_kind }}"
+project: "{{ gcp_project }}"
+service_account_file: "{{ gcp_cred_file | default(None, true) }}"
+
+upload_file_to_cloud_storage_bucket_name: "{{ test_bucket_name }}"
+upload_file_to_cloud_storage_file_path: "{{ test_file_path }}"
