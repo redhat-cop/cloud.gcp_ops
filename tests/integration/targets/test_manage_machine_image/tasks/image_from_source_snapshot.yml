@@ -1,0 +1,69 @@
+---
+- name: Create a machine image from a source snapshot
+  block:
+    - name: Create a disk
+      google.cloud.gcp_compute_disk:
+        state: present
+        name: "{{ disk_name }}"
+        zone: "{{ zone }}"
+      register: test_manage_machine_image__disk_create
+
+    - name: Create a snapshot
+      google.cloud.gcp_compute_snapshot:
+        state: present
+        name: "{{ snapshot_name }}"
+        source_disk: "{{ test_manage_machine_image__disk_create }}"
+        zone: "{{ zone }}"
+        labels:
+          my_label: value
+      register: test_manage_machine_image__snapshot_create
+
+    - name: Assert changed is true
+      ansible.builtin.assert:
+        that:
+          - test_manage_machine_image__snapshot_create.changed
+
+    - name: Verify that snapshot was created
+      google.cloud.gcp_compute_snapshot_info:
+        filters:
+          - name = {{ snapshot_name }}
+      register: test_manage_machine_image__snapshot_info
+
+    - name: Verify that command succeeded
+      ansible.builtin.assert:
+        that:
+          - test_manage_machine_image__snapshot_info['resources'] | length == 1
+
+    - name: Create a new custom machine image
+      ansible.builtin.include_role:
+        name: cloud.gcp_ops.manage_machine_image
+      vars:
+        manage_machine_image_operation: create
+        manage_machine_image_source_snapshot_name: "{{ snapshot_name }}"
+        manage_machine_image_image_name: "{{ image_name }}"
+        manage_machine_image_image_description: "{{ description }}"
+        manage_machine_image_zone: "{{ zone }}"
+
+  always:
+    - name: Delete snapshot
+      google.cloud.gcp_compute_snapshot:
+        state: absent
+        name: "{{ snapshot_name }}"
+        source_disk: "{{ test_manage_machine_image__disk_create }}"
+        zone: "{{ zone }}"
+        labels:
+          my_label: value
+      ignore_errors: true
+
+    - name: Delete image
+      google.cloud.gcp_compute_image:
+        name: "{{ image_name }}"
+        state: absent
+      ignore_errors: true
+
+    - name: Delete disk
+      google.cloud.gcp_compute_disk:
+        name: "{{ disk_name }}"
+        zone: "{{ zone }}"
+        state: absent
+      ignore_errors: true

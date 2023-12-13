@@ -1,0 +1,11 @@
+---
+# defaults file for tests/intergration/test_manage_image
+_resource_prefix: "{{ lookup('ansible.builtin.password', '/dev/null', chars=['ascii_lowercase', 'digits'], length=8, seed=inventory_hostname) }}"
+image_name: "ansible-test-{{ _resource_prefix }}-image"
+source_image_name: "ansible-test-{{ _resource_prefix }}-source-image"
+disk_name: "ansible-test-{{ _resource_prefix }}-disk"
+snapshot_name: "ansible-test-{{ _resource_prefix }}-snapshot"
+bucket_name: "ansible-test-{{ _resource_prefix }}-bucket"
+role_name: "ansible-test-{{ _resource_prefix }}-export-role"
+description: "Test manage_machine_image role"
+zone: "us-central1-a"

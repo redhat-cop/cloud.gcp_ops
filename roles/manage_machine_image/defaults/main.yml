@@ -1,0 +1,5 @@
+---
+# defaults file for manage_machine_image
+manage_machine_image_overwrite_image: false
+manage_machine_image_operation: create
+manage_machine_image_zone: "us-central1-a"

@@ -1,0 +1,143 @@
+---
+- name: Create a custom machine image
+  block:
+    - name: Verify if disk exists
+      when: manage_machine_image_source_disk_name is defined
+      block:
+        - name: Get information about the disk {{ manage_machine_image_source_disk_name }}
+          google.cloud.gcp_compute_disk_info:
+            zone: "{{ manage_machine_image_zone }}"
+            filters:
+              - name = {{ manage_machine_image_source_disk_name }}
+          register: manage_machine_image__source_disk_info
+
+        - name: Print debug message
+          ansible.builtin.debug:
+            msg: Disk {{ manage_machine_image_source_disk_name }} does not exist in {{ manage_machine_image_zone }}.
+          when: manage_machine_image__source_disk_info.resources | length == 0
+
+    - name: Verify if snapshot exists
+      when: manage_machine_image_source_snapshot_name is defined
+      block:
+        - name: Get information about the snapshot {{ manage_machine_image_source_snapshot_name }}
+          google.cloud.gcp_compute_snapshot_info:
+            filters:
+              - name = {{ manage_machine_image_source_snapshot_name }}
+          register: manage_machine_image__source_snapshot_info
+
+        - name: Print debug message
+          ansible.builtin.debug:
+            msg: Snapshot {{ manage_machine_image_source_snapshot_name }} does not exist.
+          when: manage_machine_image__source_snapshot_info.resources | length == 0
+
+    - name: Verify if image exists
+      when: manage_machine_image_source_image_name is defined
+      block:
+        - name: Get information about the image {{ manage_machine_image_source_image_name }}
+          google.cloud.gcp_compute_image_info:
+            filters:
+              - name = {{ manage_machine_image_source_image_name }}
+          register: manage_machine_image__source_image_info
+
+        - name: Print debug message
+          ansible.builtin.debug:
+            msg: Image {{ manage_machine_image_source_image_name }} does not exist.
+          when: manage_machine_image__source_image_info.resources | length == 0
+
+    - name: Set 'manage_machine_image__source'
+      ansible.builtin.set_fact:
+        manage_machine_image__source: >
+          "{{ [manage_machine_image__source_disk_info.resources, manage_machine_image__source_snapshot_info.resources,
+          manage_machine_image__source_image_info.resources]
+          | reject('undefined') | join(',') }}"
+
+    - name: Verify if the machine image already exists
+      google.cloud.gcp_compute_image_info:
+        filters:
+          - name = "{{ manage_machine_image_image_name }}"
+      register: manage_machine_image__image_result
+
+    - name: Set 'manage_machine_image__image'
+      ansible.builtin.set_fact:
+        manage_machine_image__image: "{{ manage_machine_image__image | default([]) + manage_machine_image__image_result.resources }}"
+
+    - name: Print debug message
+      ansible.builtin.debug:
+        msg: A machine image {{ manage_machine_image_image_name }} already exists.
+      when: manage_machine_image__image | length == 1
+
+    - name: Delete image if exists and manage_machine_image_overwrite_image=true
+      when: manage_machine_image__image | length == 1 and manage_machine_image_overwrite_image
+      block:
+        - name: Delete machine image
+          google.cloud.gcp_compute_image:
+            state: absent
+            name: "{{ manage_machine_image_image_name }}"
+
+        - name: Verify that machine image was deleted
+          google.cloud.gcp_compute_image_info:
+            filters:
+              - name = "{{ manage_machine_image_image_name }}"
+          register: manage_machine_image__image_result
+
+        - name: Verify that task succeeded
+          ansible.builtin.assert:
+            that:
+              - manage_machine_image__image_result.resources | length == 0
+
+        - name: Print debug message
+          ansible.builtin.debug:
+            msg: Machine image {{ manage_machine_image_image_name }} has been successfully deleted.
+          when: manage_machine_image__image_result.resources | length == 0
+
+        - name: Set 'manage_machine_image__image'
+          ansible.builtin.set_fact:
+            manage_machine_image__image: []
+
+    - name: Print debug message
+      ansible.builtin.debug:
+        msg: Machine image {{ manage_machine_image_image_name }} already exists.
+      when: manage_machine_image__image | length == 1
+
+    - name: Create a new custom machine image
+      when: (manage_machine_image__source | length == 1 or manage_machine_image_source_raw_disk is defined) and manage_machine_image__image | length == 0
+      block:
+        - name: Create new custom machine image
+          google.cloud.gcp_compute_image:
+            state: present
+            name: "{{ manage_machine_image_image_name }}"
+            source_disk: "{{ manage_machine_image__source_disk_info.resources.0 | default(omit) }}"
+            source_snapshot: "{{ manage_machine_image__source_snapshot_info.resources.0 | default(omit) }}"
+            source_image: "{{ manage_machine_image__source_image_info.resources.0 | default(omit) }}"
+            raw_disk: "{{ manage_machine_image_source_raw_disk | default(omit) }}"
+            source_disk_encryption_key: "{{ manage_machine_image_source_disk_encryption_key | default(omit) }}"
+            image_encryption_key: "{{ manage_machine_image_image_encryption_key | default(omit) }}"
+            description: "{{ manage_machine_image_description | default(omit) }}"
+            disk_size_gb: "{{ manage_machine_image_disk_size_gb | default(omit) }}"
+            family: "{{ manage_machine_image_family | default(omit) }}"
+            guest_os_features: "{{ manage_machine_image_guest_os_features | default(omit) }}"
+            labels: "{{ manage_machine_image_labels | default(omit) }}"
+            licenses: "{{ manage_machine_image_licenses | default(omit) }}"
+            source_type: "{{ manage_machine_image_source_type | default(omit) }}"
+          register: manage_machine_image__create_image
+
+        - name: Verify that task succeeded
+          ansible.builtin.assert:
+            that:
+              - manage_machine_image__create_image.changed
+
+        - name: Verify that image was created
+          google.cloud.gcp_compute_image_info:
+            filters:
+              - name = "{{ manage_machine_image_image_name }}"
+          register: manage_machine_image__create_image_info
+
+        - name: Verify that task succeeded
+          ansible.builtin.assert:
+            that:
+              - manage_machine_image__create_image_info.resources | length == 1
+
+        - name: Print debug message
+          ansible.builtin.debug:
+            msg: Custom machine image {{ manage_machine_image_image_name }} has been successfully created.
+          when: manage_machine_image__create_image_info.resources | length == 1
