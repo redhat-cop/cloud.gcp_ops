@@ -32,7 +32,7 @@ Name | Description
 
 ### Requirements
 
-The [google.cloud](https://github.com/ansible-collections/google.cloud) collection MUST be installed in order for this collection to work.
+The [google.cloud](https://github.com/ansible-collections/google.cloud), [community.libvirt](https://github.com/ansible-collections/community.libvirt) and [community.general](https://github.com/ansible-collections/community.general) collections MUST be installed in order for this collection to work.
 
 ### Installation
 
