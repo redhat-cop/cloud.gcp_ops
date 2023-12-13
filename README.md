@@ -9,6 +9,10 @@ The collection includes a variety of Ansible roles and playbooks to help automat
 
 This collection has been tested against following Ansible versions: **>=2.14.0**.
 
+## Python version compatibility
+
+This collection requires Python 3.9 or greater.
+
 ## Included content
 
 Click on the name of a role to view that content's documentation:
