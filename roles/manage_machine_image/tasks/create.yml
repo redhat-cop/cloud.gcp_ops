@@ -46,7 +46,10 @@
 
     - name: Set 'manage_machine_image__source'
       ansible.builtin.set_fact:
-        manage_machine_image__source: "{{ [manage_machine_image__source_disk_info.resources, manage_machine_image__source_snapshot_info.resources, manage_machine_image__source_image_info.resources] | reject('undefined') | join(',') }}"
+        manage_machine_image__source: >
+          "{{ [manage_machine_image__source_disk_info.resources, manage_machine_image__source_snapshot_info.resources,
+          manage_machine_image__source_image_info.resources]
+          | reject('undefined') | join(',') }}"
 
     - name: Verify if the machine image already exists
       google.cloud.gcp_compute_image_info:
