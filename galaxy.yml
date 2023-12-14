@@ -22,3 +22,6 @@ dependencies:
 build_ignore:
   - .DS_Store
   - '*.tar.gz'
+  - "*cloud-config-gcp.ini"
+  - "*cloud-config-gcp.yml"
+  - changelogs/.plugin-cache.yaml

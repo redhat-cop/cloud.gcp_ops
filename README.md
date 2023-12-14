@@ -9,6 +9,10 @@ The collection includes a variety of Ansible roles and playbooks to help automat
 
 This collection has been tested against following Ansible versions: **>=2.14.0**.
 
+## Python version compatibility
+
+This collection requires Python 3.9 or greater.
+
 ## Included content
 
 Click on the name of a role to view that content's documentation:
@@ -32,7 +36,7 @@ Name | Description
 
 ### Requirements
 
-The [google.cloud](https://github.com/ansible-collections/google.cloud) collection MUST be installed in order for this collection to work.
+The [google.cloud](https://github.com/ansible-collections/google.cloud), [community.libvirt](https://github.com/ansible-collections/community.libvirt) and [community.general](https://github.com/ansible-collections/community.general) collections MUST be installed in order for this collection to work.
 
 ### Installation
 
