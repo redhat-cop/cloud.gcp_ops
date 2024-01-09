@@ -40,12 +40,23 @@ The [google.cloud](https://github.com/ansible-collections/google.cloud), [commun
 
 ### Installation
 
-Clone the collection repository.
+To consume this Validated Content from Automation Hub, please ensure that you add the following lines to your ansible.cfg file.
 
-```shell
-  mkdir -p ~/.ansible/collections/ansible_collections/cloud/gcp_ops
-  cd ~/.ansible/collections/ansible_collections/cloud/gcp_ops
-  git clone https://github.com/redhat-cop/cloud.gcp_ops .
+```
+[galaxy]
+server_list = automation_hub
+
+[galaxy_server.automation_hub]
+url=https://cloud.redhat.com/api/automation-hub/
+auth_url=https://sso.redhat.com/auth/realms/redhat-external/protocol/openid-connect/token
+token=<SuperSecretToken>
+```
+The token can be obtained from the [Automation Hub Web UI](https://console.redhat.com/ansible/automation-hub/token).
+
+Once the above steps are done, you can run the following command to install the collection.
+
+```
+ansible-galaxy collection install cloud.gcp_ops
 ```
 
 ### Using this collection
@@ -99,6 +110,7 @@ Sanity and unit tests are run as normal:
 Integration tests require GCP credentials that must be provided to ansible-test. To authenticate using service account credentials:
 
 1. [Create a service account key](https://support.google.com/cloud/answer/6158849?hl=en&ref_topic=6262490#serviceaccounts&zippy=%2Cservice-accounts) in the GCP console and save the json cred file.
+
 2. Create the file `tests/integration/cloud-config-gcp.ini` containing the following:
 
    ```ini
