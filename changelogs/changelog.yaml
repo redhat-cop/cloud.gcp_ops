@@ -5,26 +5,26 @@ releases:
       release_summary: This collection release includes several Ansible roles and
         playbooks to help automate the management of resources on GCP.
     fragments:
-    - new_roles_and_playbooks.yml
-    - release_summary.yml
+      - new_roles_and_playbooks.yml
+      - release_summary.yml
     objects:
       playbook:
-      - description: A playbook to migrate an existing on prem VM running on KVM hypervisor
-          to GCP.
-        name: move_vm_from_on_prem_to_gcp
-        namespace: null
-      - description: A playbook to upload a file from a remote host to GCP Cloud Storage.
-        name: upload_file_to_cloud_storage
-        namespace: null
+        - description: A playbook to migrate an existing on prem VM running on KVM hypervisor
+            to GCP.
+          name: move_vm_from_on_prem_to_gcp
+          namespace: null
+        - description: A playbook to upload a file from a remote host to GCP Cloud Storage.
+          name: upload_file_to_cloud_storage
+          namespace: null
       role:
-      - description: A role to clone an existing on prem VM using the KVM hypervisor.
-        name: clone_on_prem_vm
-        namespace: null
-      - description: A role that imports a local .raw image into a GCP custom image
-          and run a GCP instance.
-        name: import_image_and_run_gcp_instance
-        namespace: null
-      - description: A role to create / delete a GCP custom machine image.
-        name: manage_machine_image
-        namespace: null
+        - description: A role to clone an existing on prem VM using the KVM hypervisor.
+          name: clone_on_prem_vm
+          namespace: null
+        - description: A role that imports a local .raw image into a GCP custom image
+            and run a GCP instance.
+          name: import_image_and_run_gcp_instance
+          namespace: null
+        - description: A role to create / delete a GCP custom machine image.
+          name: manage_machine_image
+          namespace: null
     release_date: '2024-01-31'
