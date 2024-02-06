@@ -27,4 +27,4 @@ releases:
         - description: A role to create / delete a GCP custom machine image.
           name: manage_machine_image
           namespace: null
-    release_date: '2024-01-31'
+    release_date: '2024-02-06'
