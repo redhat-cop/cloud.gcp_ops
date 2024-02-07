@@ -1,4 +1,4 @@
-import_image_and_run_gcp_instance
+cloud.gcp_ops.import_image_and_run_gcp_instance
 =================================
 
 A role that imports a local .raw image into a GCP custom image and run a GCP instance.

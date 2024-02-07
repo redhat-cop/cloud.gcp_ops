@@ -1,4 +1,4 @@
-Role Name
+cloud.gcp_ops.manage_machine_image
 =========
 
 A role to create / delete a GCP custom machine image.
