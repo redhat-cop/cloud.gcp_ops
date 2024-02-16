@@ -7,5 +7,5 @@ GitHub Actions are used to run the Continuous Integration for redhat-cop/cloud.g
 | Jobs | Description | Python Versions | Ansible Versions |
 | ------ |-------| ------ | -----------|
 | changelog |Checks for the presence of Changelog fragments | 3.9 | devel |
-| Linters | Runs `ansible-lint`, `black`,`flake8` and `isort`| 3.9 and 3.11 for ansible-lint| devel |
-| Sanity | Runs ansible sanity checks | 3.9, 3.10, 3.11, 3.12 | 2.14 (not on3.12), 2.15 (not on 3.12), 2.16 (not on 3.9), stable (not on 3.9), Devel (not on 3.9) |
+| Linters | Runs `ansible-lint`, `black`, `flake8` and `isort`| 3.9 and 3.11 for ansible-lint| devel |
+| Sanity | Runs ansible sanity checks | 3.9, 3.10, 3.11, 3.12 | 2.14 (not on 3.12), 2.15 (not on 3.12), 2.16 (not on 3.9), stable (not on 3.9), devel (not on 3.9) |
