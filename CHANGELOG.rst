@@ -1,9 +1,16 @@
-===========================
+============================
 cloud.gcp_ops Release Notes
-===========================
+============================
 
 .. contents:: Topics
 
+v2.0.0
+======
+
+Release Summary
+---------------
+
+This release removes support for ansible-core < 2.15.
 
 v1.0.0
 ======

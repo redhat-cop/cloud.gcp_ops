@@ -28,3 +28,9 @@ releases:
           name: manage_machine_image
           namespace: null
     release_date: '2024-02-06'
+  2.0.0:
+    changes:
+      release_summary: This release removes support for ansible-core < 2.15.
+    fragments:
+      - v2.0.0.yml
+    release_date: '2024-07-24'
