@@ -1,5 +1,5 @@
 ============================
-cloud.gcp\_ops Release Notes
+cloud.gcp_ops Release Notes
 ============================
 
 .. contents:: Topics
