@@ -1,4 +1,4 @@
-# cloud.gcp_ops roles/playbooks Validate Content Collection
+# cloud.gcp_ops roles/playbooks Validated Content Collection
 
 This repository hosts the `cloud.gcp_ops` Ansible Collection.
 
