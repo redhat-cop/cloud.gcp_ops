@@ -28,3 +28,15 @@ releases:
           name: manage_machine_image
           namespace: null
     release_date: '2024-02-06'
+  2.0.0:
+    changes:
+      breaking_changes:
+        - Bump minimum version requirement for ansible-core to 2.15 (https://github.com/redhat-cop/cloud.gcp_ops/pull/14).
+        minor_changes:
+        - Bump version of ansible-lint to minimum 24.7.0 (https://github.com/redhat-cop/cloud.gcp_ops/pull/14).
+        release_summary: This release removes support for ansible-core < 2.15.
+    fragments:
+      - 14-bump-ansible-lint-version.yml
+      - 2.0.0.yml
+      - readme_template_update.yml
+    release_date: '2024-07-31'
