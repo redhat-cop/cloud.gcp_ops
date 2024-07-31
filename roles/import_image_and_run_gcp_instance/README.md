@@ -96,7 +96,7 @@ License
 
 GNU General Public License v3.0 or later
 
-See [LICENCE](https://github.com/ansible-collections/cloud.gcp_ops/blob/main/LICENSE) to see the full text.
+See [LICENCE](https://github.com/ansible-collections/cloud.gcp_ops/blob/stable-2/LICENSE) to see the full text.
 
 Author Information
 ------------------
