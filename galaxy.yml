@@ -10,7 +10,7 @@ namespace: cloud
 name: gcp_ops
 version: 1.0.0
 readme: README.md
-repository: https://github.com/ansible-collections/cloud.aws_gcp
+repository: https://github.com/ansible-collections/cloud.gcp_ops
 tags:
   - gcp
   - cloud
