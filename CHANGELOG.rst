@@ -4,6 +4,23 @@ cloud.gcp_ops Release Notes
 
 .. contents:: Topics
 
+v2.0.0
+======
+
+Release Summary
+---------------
+
+This release removes support for ansible-core < 2.15.
+
+Minor Changes
+-------------
+
+- Bump version of ansible-lint to minimum 24.7.0 (https://github.com/redhat-cop/cloud.gcp_ops/pull/14).
+
+Breaking Changes / Porting Guide
+--------------------------------
+
+- Bump minimum version requirement for ansible-core to 2.15 (https://github.com/redhat-cop/cloud.gcp_ops/pull/14).
 
 v1.0.0
 ======
