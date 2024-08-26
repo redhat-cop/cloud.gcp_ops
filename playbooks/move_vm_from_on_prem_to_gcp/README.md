@@ -43,7 +43,7 @@ ansible-playbook cloud.gcp_ops.move_vm_from_on_prem_to_gcp.move_vm_from_on_prem_
 
 GNU General Public License v3.0 or later
 
-See [LICENCE](https://github.com/redhat-cop/cloud.gcp_ops/blob/stable-2/LICENSE) to see the full text.
+See [LICENCE](https://github.com/redhat-cop/cloud.gcp_ops/blob/main/LICENSE) to see the full text.
 
 ## Author Information
 
