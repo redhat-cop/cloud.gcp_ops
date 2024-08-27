@@ -149,7 +149,7 @@ To authenticate with [application default credentials](https://cloud.google.com/
 
 Once credentials are set up, run all integration tests with `ansible-test integration` or run a subset of integration tests with `ansible-test integration <target>`
 
-This collection is tested using GitHub Actions. To know more about CI, refer to [CI.md](https://github.com/https://github.com/redhat-cop/cloud.gcp_ops/blob/main/CI.md).
+This collection is tested using GitHub Actions. To know more about CI, refer to [CI.md](https://github.com/redhat-cop/cloud.gcp_ops/blob/main/CI.md).
 
 ## Support
 
